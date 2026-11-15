@@ -169,6 +169,23 @@
     .reveal { opacity: 1; transform: none; }
   }
 
+  .loader { position: fixed; inset: 0; z-index: 100; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
+            background: radial-gradient(60% 60% at 50% 40%, #1f1b3d, #09090d); transition: opacity .6s ease, visibility .6s; }
+  .loader.gone { opacity: 0; visibility: hidden; }
+  .loader svg { width: 150px; height: 120px; animation: loaderHop 1.1s ease-in-out infinite; }
+  @keyframes loaderHop { 50% { transform: translateY(-14px) rotate(-4deg); } }
+  .loader-title { font-size: 19px; }
+  .loader-bar { width: min(320px, 70vw); height: 6px; border-radius: 6px; background: #ffffff18; overflow: hidden; }
+  .loader-bar i { display: block; height: 100%; width: 0; background: var(--accent); border-radius: 6px; transition: width .3s ease; box-shadow: 0 0 14px var(--accent); }
+  .loader-count { color: var(--subtle); font-size: 14px; }
+  .loader-skip { margin-top: 6px; border: 0; background: #ffffff14; color: var(--text); font: inherit; font-size: 14px; padding: 7px 18px; border-radius: 999px; cursor: pointer; opacity: 0; transition: opacity .4s; }
+  .loader-skip.show { opacity: 1; }
+  body.loading { overflow: hidden; }
+  .waiting img { opacity: 0; }
+  .tile img, .shot img, .two img { transition: opacity .5s ease; }
+  .waiting { background-image: linear-gradient(100deg, transparent 30%, #ffffff10 50%, transparent 70%); background-size: 220% 100%; animation: shimmer 1.3s linear infinite; }
+  @keyframes shimmer { from { background-position: 120% 0; } to { background-position: -120% 0; } }
+  .tile img { height: auto; aspect-ratio: auto; }
   .shot { margin: 40px auto 0; max-width: 820px; border-radius: 26px; overflow: hidden; border: 1px solid var(--line); box-shadow: 0 30px 90px #000b; }
   .shot img { display: block; width: 100%; }
   .chips { justify-content: center; margin-top: 22px; }
@@ -200,6 +217,14 @@
 <link rel="stylesheet" href="play.css">
 </head>
 <body>
+
+<div class="loader" id="loader" role="status" aria-live="polite">
+  <svg class="mascot" viewBox="0 -6 120 102" aria-hidden="true"></svg>
+  <b class="loader-title">Pitzki is setting up your desk...</b>
+  <div class="loader-bar"><i id="loader-fill"></i></div>
+  <span class="loader-count" id="loader-count">Getting ready</span>
+  <button class="loader-skip" id="loader-skip">Skip</button>
+</div>
 
 <div class="sky"><i></i><i></i><i></i></div>
 
@@ -286,175 +311,175 @@
       <div class="chips" id="filter"><button class="on" data-g="">All 43</button><button data-g="Everyday">Everyday 14</button><button data-g="Money">Money 11</button><button data-g="Your PC">Your PC 7</button><button data-g="Music and games">Music and games 11</button></div>
       <div class="gallery">
       <figure class="tile reveal" data-g="Everyday">
-        <img src="media/pitzki.gif" alt="Pitzki" loading="lazy">
+        <img src="media/pitzki.gif" alt="Pitzki" width="365" height="300" decoding="async">
         <figcaption><b>Pitzki</b><span>Pitzki sits on your desktop, blinks, follows your mouse, and about once a minute does something: juggling, guitar, pizza, a CS2 case. He dances to your music and sleeps at night.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Everyday">
-        <img src="media/clock.gif" alt="Clock" loading="lazy">
+        <img src="media/clock.gif" alt="Clock" width="365" height="300" decoding="async">
         <figcaption><b>Clock</b><span>The time, big, with the date under it. Says morning, afternoon, evening or night.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Everyday">
-        <img src="media/calendar.gif" alt="Calendar" loading="lazy">
+        <img src="media/calendar.gif" alt="Calendar" width="365" height="300" decoding="async">
         <figcaption><b>Calendar</b><span>This month at a glance, with today marked.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Everyday">
-        <img src="media/weather.gif" alt="Weather" loading="lazy">
+        <img src="media/weather.gif" alt="Weather" width="365" height="300" decoding="async">
         <figcaption><b>Weather</b><span>The temperature and the sky where you are, and Pitzki out in it: an umbrella in the rain, a hat in the snow, waving in the sun.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Everyday">
-        <img src="media/notes.gif" alt="Note" loading="lazy">
+        <img src="media/notes.gif" alt="Note" width="365" height="300" decoding="async">
         <figcaption><b>Note</b><span>A sticky note you type straight onto the desktop. It saves by itself.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Everyday">
-        <img src="media/tasks.gif" alt="Tasks" loading="lazy">
+        <img src="media/tasks.gif" alt="Tasks" width="365" height="300" decoding="async">
         <figcaption><b>Tasks</b><span>A short to-do list. Tick things off, add with Enter, clear the done ones.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Everyday">
-        <img src="media/timer.gif" alt="Timer" loading="lazy">
+        <img src="media/timer.gif" alt="Timer" width="365" height="300" decoding="async">
         <figcaption><b>Timer</b><span>Count down any number of minutes. Pitzki dances when it is up.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Everyday">
-        <img src="media/pomodoro.gif" alt="Focus rounds" loading="lazy">
+        <img src="media/pomodoro.gif" alt="Focus rounds" width="365" height="300" decoding="async">
         <figcaption><b>Focus rounds</b><span>25 minutes of work, 5 of rest, a long break after every fourth round, and a count of today&#x27;s rounds.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Everyday">
-        <img src="media/countdown.gif" alt="Countdown" loading="lazy">
+        <img src="media/countdown.gif" alt="Countdown" width="365" height="300" decoding="async">
         <figcaption><b>Countdown</b><span>How many days are left until a date that matters, with a bar of how far along you are.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Everyday">
-        <img src="media/agenda.gif" alt="What&#x27;s next" loading="lazy">
+        <img src="media/agenda.gif" alt="What&#x27;s next" width="365" height="300" decoding="async">
         <figcaption><b>What&#x27;s next</b><span>The next things in the calendar of this PC (read only), with how long until each one.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Everyday">
-        <img src="media/calc.gif" alt="Calculator" loading="lazy">
+        <img src="media/calc.gif" alt="Calculator" width="365" height="300" decoding="async">
         <figcaption><b>Calculator</b><span>Type a sum, a unit or money and the answer appears as you type: 12*(3+4), 5 km to mi, 20 usd to eur.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Everyday">
-        <img src="media/worldclock.gif" alt="World clock" loading="lazy">
+        <img src="media/worldclock.gif" alt="World clock" width="365" height="300" decoding="async">
         <figcaption><b>World clock</b><span>The time in three cities you choose, and how far ahead or behind they are.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Everyday">
-        <img src="media/photos.gif" alt="Photos" loading="lazy">
+        <img src="media/photos.gif" alt="Photos" width="365" height="300" decoding="async">
         <figcaption><b>Photos</b><span>A picture frame for a folder of your photos. It moves on every few seconds.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Everyday">
-        <img src="media/shortcuts.gif" alt="Shortcuts" loading="lazy">
+        <img src="media/shortcuts.gif" alt="Shortcuts" width="365" height="300" decoding="async">
         <figcaption><b>Shortcuts</b><span>Your favourite programs and folders as icons, one click away. Drag them in from Explorer.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Money">
-        <img src="media/stocks.gif" alt="Stocks" loading="lazy">
+        <img src="media/stocks.gif" alt="Stocks" width="365" height="300" decoding="async">
         <figcaption><b>Stocks</b><span>Up to six stocks: the price, today&#x27;s move and a line of the day. A bell can tell you when one moves 2, 3, 5 or 10%.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Money">
-        <img src="media/chart.gif" alt="Stock chart" loading="lazy">
+        <img src="media/chart.gif" alt="Stock chart" width="365" height="300" decoding="async">
         <figcaption><b>Stock chart</b><span>One stock, big, over a day, a week, a month, six months or a year.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Money">
-        <img src="media/portfolio.gif" alt="My portfolio" loading="lazy">
+        <img src="media/portfolio.gif" alt="My portfolio" width="365" height="300" decoding="async">
         <figcaption><b>My portfolio</b><span>The shares you own: what they are worth now and how much you are up or down since you bought.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Money">
-        <img src="media/indices.gif" alt="Indexes" loading="lazy">
+        <img src="media/indices.gif" alt="Indexes" width="365" height="300" decoding="async">
         <figcaption><b>Indexes</b><span>The S&amp;P 500, Nasdaq, Dow Jones and Tel Aviv 35, live.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Money">
-        <img src="media/markets.gif" alt="Market hours" loading="lazy">
+        <img src="media/markets.gif" alt="Market hours" width="365" height="300" decoding="async">
         <figcaption><b>Market hours</b><span>When New York and Tel Aviv open and close, counting down, in your own time.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Money">
-        <img src="media/paper.gif" alt="Pretend portfolio" loading="lazy">
+        <img src="media/paper.gif" alt="Pretend portfolio" width="365" height="300" decoding="async">
         <figcaption><b>Pretend portfolio</b><span>$10,000 of play money: buy and sell real stocks at real prices, with no real money.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Money">
-        <img src="media/guess.gif" alt="Higher or lower?" loading="lazy">
+        <img src="media/guess.gif" alt="Higher or lower?" width="365" height="300" decoding="async">
         <figcaption><b>Higher or lower?</b><span>Will a stock be higher or lower tomorrow? Guess, and the card keeps score.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Money">
-        <img src="media/marketnews.gif" alt="Market news" loading="lazy">
+        <img src="media/marketnews.gif" alt="Market news" width="365" height="300" decoding="async">
         <figcaption><b>Market news</b><span>A fresh headline about each of your stocks. Click one to read it.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Money">
-        <img src="media/crypto.gif" alt="Crypto" loading="lazy">
+        <img src="media/crypto.gif" alt="Crypto" width="365" height="300" decoding="async">
         <figcaption><b>Crypto</b><span>Bitcoin, Ethereum and Solana, live, with a line of the day.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Money">
-        <img src="media/rates.gif" alt="Dollar &amp; euro" loading="lazy">
+        <img src="media/rates.gif" alt="Dollar &amp; euro" width="365" height="300" decoding="async">
         <figcaption><b>Dollar &amp; euro</b><span>The dollar and the euro in shekels, with a line of the week.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Money">
-        <img src="media/convert.gif" alt="Money converter" loading="lazy">
+        <img src="media/convert.gif" alt="Money converter" width="365" height="300" decoding="async">
         <figcaption><b>Money converter</b><span>Dollars, shekels, euros, pounds, yen and coins, at the rate right now.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Your PC">
-        <img src="media/system.gif" alt="This PC" loading="lazy">
+        <img src="media/system.gif" alt="This PC" width="365" height="300" decoding="async">
         <figcaption><b>This PC</b><span>Processor, graphics, memory, network and how long the PC has been on, with a graph of the last minute. The pencil hides rows you don&#x27;t need.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Your PC">
-        <img src="media/drives.gif" alt="Drives" loading="lazy">
+        <img src="media/drives.gif" alt="Drives" width="365" height="300" decoding="async">
         <figcaption><b>Drives</b><span>How much room is left on each drive.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Your PC">
-        <img src="media/batteries.gif" alt="Batteries" loading="lazy">
+        <img src="media/batteries.gif" alt="Batteries" width="365" height="300" decoding="async">
         <figcaption><b>Batteries</b><span>Bluetooth headphones, mouse and controllers that report a battery, and the laptop itself.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Your PC">
-        <img src="media/clipboard.gif" alt="Copied" loading="lazy">
+        <img src="media/clipboard.gif" alt="Copied" width="365" height="300" decoding="async">
         <figcaption><b>Copied</b><span>The last few things you copied. Click one to copy it again. Kept in memory only.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Your PC">
-        <img src="media/clips.gif" alt="Clips" loading="lazy">
+        <img src="media/clips.gif" alt="Clips" width="365" height="300" decoding="async">
         <figcaption><b>Clips</b><span>Your newest recording or screenshot, ready to open, with arrows to go back.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Your PC">
-        <img src="media/screentime.gif" alt="Screen time" loading="lazy">
+        <img src="media/screentime.gif" alt="Screen time" width="365" height="300" decoding="async">
         <figcaption><b>Screen time</b><span>How long you were at the PC today, the programs you used most, and the last seven days.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Your PC">
-        <img src="media/claude.gif" alt="Claude usage" loading="lazy">
+        <img src="media/claude.gif" alt="Claude usage" width="365" height="300" decoding="async">
         <figcaption><b>Claude usage</b><span>How much of your Claude plan is used, and when each limit resets. Needs Claude Code on this PC.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Music and games">
-        <img src="media/music.gif" alt="Music" loading="lazy">
+        <img src="media/music.gif" alt="Music" width="365" height="300" decoding="async">
         <figcaption><b>Music</b><span>Whatever is playing in any app (Spotify, a browser, anything), with the cover, real buttons, and a bar you can drag. Shows the line being sung when the song has timed lyrics.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Music and games">
-        <img src="media/discord.gif" alt="Discord" loading="lazy">
+        <img src="media/discord.gif" alt="Discord" width="365" height="300" decoding="async">
         <figcaption><b>Discord</b><span>Your Discord voice channel: who is in it, who is talking, Mute and Deafen, and new messages.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Music and games">
-        <img src="media/sound.gif" alt="Sound" loading="lazy">
+        <img src="media/sound.gif" alt="Sound" width="365" height="300" decoding="async">
         <figcaption><b>Sound</b><span>Who is using the microphone (with Mute mic), the camera, Discord&#x27;s Mute and Deafen, and a volume slider for every app.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Music and games">
-        <img src="media/steam.gif" alt="Steam" loading="lazy">
+        <img src="media/steam.gif" alt="Steam" width="365" height="300" decoding="async">
         <figcaption><b>Steam</b><span>What Steam is downloading and how far along, how many games are running, or the game you played last.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Music and games">
-        <img src="media/cs2inv.gif" alt="CS2 inventory" loading="lazy">
+        <img src="media/cs2inv.gif" alt="CS2 inventory" width="365" height="300" decoding="async">
         <figcaption><b>CS2 inventory</b><span>What your CS2 skins are worth, how it moved since yesterday, the days before, and your biggest movers.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Music and games">
-        <img src="media/networth.gif" alt="All my Steam" loading="lazy">
+        <img src="media/networth.gif" alt="All my Steam" width="365" height="300" decoding="async">
         <figcaption><b>All my Steam</b><span>Your CS2 inventory and your Steam items together, in one number.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Music and games">
-        <img src="media/skinwatch.gif" alt="Skin watch list" loading="lazy">
+        <img src="media/skinwatch.gif" alt="Skin watch list" width="365" height="300" decoding="async">
         <figcaption><b>Skin watch list</b><span>Skins you want and the price you would pay. You get a note when one drops to your price.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Music and games">
-        <img src="media/cases.gif" alt="Is opening worth it?" loading="lazy">
+        <img src="media/cases.gif" alt="Is opening worth it?" width="365" height="300" decoding="async">
         <figcaption><b>Is opening worth it?</b><span>Your CS2 cases: what opening one gives back on average, the chance to win, and the best drop.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Music and games">
-        <img src="media/steamitems.gif" alt="Steam items" loading="lazy">
+        <img src="media/steamitems.gif" alt="Steam items" width="365" height="300" decoding="async">
         <figcaption><b>Steam items</b><span>What your Steam trading cards, backgrounds and emoticons are worth on the market.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Music and games">
-        <img src="media/news.gif" alt="Game updates" loading="lazy">
+        <img src="media/news.gif" alt="Game updates" width="365" height="300" decoding="async">
         <figcaption><b>Game updates</b><span>What changed in the latest patch of the games you play on Steam.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Music and games">
-        <img src="media/robrun.gif" alt="Last game" loading="lazy">
+        <img src="media/robrun.gif" alt="Last game" width="365" height="300" decoding="async">
         <figcaption><b>Last game</b><span>How your last game went, any game Pitzki summarises (CS2, Fortnite, Roblox...). ROB RUN shows live.</span></figcaption>
       </figure>
       </div>
@@ -550,6 +575,31 @@
   </footer>
 </main>
 
+<script>
+  // The loading screen: waits for every clip on the page (they are real GIFs, a few MB in all), then lifts.
+  (() => {
+    const loader = document.getElementById('loader'), fill = document.getElementById('loader-fill'), count = document.getElementById('loader-count');
+    const imgs = [...document.images].filter(i => !i.closest('.loader'));
+    let done = 0, closed = false;
+    const close = () => { if (closed) return; closed = true; loader.classList.add('gone'); document.body.classList.remove('loading'); setTimeout(() => loader.remove(), 700); };
+    const one = () => {
+      done++;
+      fill.style.width = (done / imgs.length * 100) + '%';
+      count.textContent = `${done} of ${imgs.length} pictures`;
+      if (done >= imgs.length) setTimeout(close, 350);
+    };
+    document.body.classList.add('loading');
+    imgs.forEach(i => {
+      i.closest('.tile, .shot, .two figure')?.classList.add('waiting');
+      const ok = () => { i.closest('.waiting')?.classList.remove('waiting'); one(); };
+      if (i.complete && i.naturalWidth) ok(); else { i.addEventListener('load', ok, { once: true }); i.addEventListener('error', one, { once: true }); }
+    });
+    if (!imgs.length) close();
+    document.getElementById('loader-skip').addEventListener('click', close);
+    setTimeout(() => document.getElementById('loader-skip').classList.add('show'), 4000);
+    setTimeout(close, 25000);    // a slow connection never keeps anyone out for long
+  })();
+</script>
 <script>window.SCENES = [{"k": "cocoa", "n": "Hot cocoa", "when": ""}, {"k": "game", "n": "Video game", "when": ""}, {"k": "tv", "n": "TV", "when": ""}, {"k": "gum", "n": "Bubble gum", "when": ""}, {"k": "juggle", "n": "Juggling", "when": ""}, {"k": "balisong", "n": "Balisong tricks", "when": ""}, {"k": "karambit", "n": "Karambit tricks", "when": ""}, {"k": "case", "n": "CS2 case", "when": ""}, {"k": "pizza", "n": "Pizza", "when": ""}, {"k": "guitar", "n": "Guitar", "when": ""}, {"k": "skate", "n": "Skateboard", "when": ""}, {"k": "hoops", "n": "Basketball", "when": ""}, {"k": "balloon", "n": "Balloon", "when": ""}, {"k": "phone", "n": "Phone", "when": ""}, {"k": "fishing", "n": "Fishing", "when": ""}, {"k": "paint", "n": "Painting", "when": ""}, {"k": "yoga", "n": "Yoga", "when": ""}, {"k": "kite", "n": "Kite", "when": ""}, {"k": "cube", "n": "Puzzle cube", "when": ""}, {"k": "cat", "n": "A cat", "when": ""}, {"k": "pancake", "n": "Pancakes", "when": ""}, {"k": "sweep", "n": "Sweeping", "when": ""}, {"k": "bowling", "n": "Bowling", "when": ""}, {"k": "telescope", "n": "Stargazing", "when": ""}, {"k": "drums", "n": "Drums", "when": ""}, {"k": "yoyo", "n": "Yo-yo", "when": ""}, {"k": "coffee", "n": "Coffee", "when": "mornings"}, {"k": "movie", "n": "Movie", "when": "weekends"}, {"k": "birthday", "n": "Birthday", "when": "your birthday"}, {"k": "hello", "n": "Hello", "when": "when the app starts"}, {"k": "boot", "n": "Booting up", "when": "after the PC starts"}, {"k": "umbrella", "n": "Umbrella", "when": "when it rains"}, {"k": "popsicle", "n": "Popsicle", "when": "hot days"}, {"k": "hanukkah", "n": "Hanukkah", "when": "on the day"}, {"k": "christmas", "n": "Christmas", "when": "on the day"}, {"k": "purim", "n": "Purim", "when": "on the day"}, {"k": "newyear", "n": "New Year", "when": "on the day"}, {"k": "alien", "n": "A rare alien", "when": "very rare"}];</script>
 <script>
   const art = document.getElementById('mascot-art');
