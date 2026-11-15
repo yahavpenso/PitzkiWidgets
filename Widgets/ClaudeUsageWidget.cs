@@ -128,9 +128,12 @@ public sealed class ClaudeUsageWidget : UserControl
         }
     }
 
+    /// <summary>For the README clips: nothing is asked, only what Feed puts on the card.</summary>
+    internal static bool Demo;
+
     async Task RefreshAsync()
     {
-        if (_busy) return;
+        if (_busy || Demo) return;
         _busy = true;
         try
         {

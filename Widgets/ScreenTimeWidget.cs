@@ -22,6 +22,9 @@ public sealed class ScreenTimeWidget : UserControl
     internal static string File = Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "PitzkiWidgets", "screentime.json");
 
+    /// <summary>For the README clips: nothing real is counted, and this is shown as what is in use now.</summary>
+    internal static string? Pretend;
+
     internal static ScreenTime Counter
     {
         get
@@ -29,7 +32,7 @@ public sealed class ScreenTimeWidget : UserControl
             if (_counter != null) return _counter;
             _counter = new ScreenTime(File);
             _ticking = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
-            _ticking.Tick += (_, _) => _counter.Tick(IntPtr.Zero, true);
+            _ticking.Tick += (_, _) => { if (Pretend == null) _counter.Tick(IntPtr.Zero, true); };
             _ticking.Start();
             Application.Current.Exit += (_, _) => _counter.Save();
             return _counter;
@@ -90,7 +93,8 @@ public sealed class ScreenTimeWidget : UserControl
         double total = counter.Total(DateTime.Today);
         _total.Count(total < 60 ? "0 m" : ScreenTime.Spell(total), total, _shownTotal);
         _shownTotal = total;
-        _now.Say(counter.Now.Length > 0 ? "Now: " + counter.Now : "Counting while you use the PC");
+        string now = Pretend ?? counter.Now;
+        _now.Say(now.Length > 0 ? "Now: " + now : "Counting while you use the PC");
 
         // the top four programs, each with a bar against the biggest
         var top = counter.Day(DateTime.Today).Take(4).ToList();

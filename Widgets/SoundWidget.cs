@@ -93,8 +93,58 @@ public sealed class SoundWidget : UserControl
         ShowMic();
     }
 
+    /// <summary>For the README clips: nothing real is read, only what ShowDemo puts on the card.</summary>
+    internal static bool Demo;
+
+    internal void ShowDemo(string micUser, string camera, string channel, IList<(string Name, string Exe, double Volume)> apps)
+    {
+        _micWords.Say(micUser.Length > 0 ? "Microphone in use · " + micUser : "Microphone on, nobody using it");
+        _micDot.Fill = Live.Blend(_micDot.Fill, Of(micUser.Length > 0 ? "WarnBrush" : "SubtleBrush"), this);
+        Live.Show(_mic, true, this);
+        if (camera.Length > 0) _camera.Say("Camera in use · " + camera);
+        Live.Show(_camera, camera.Length > 0, this);
+        _discordWords.Say(channel.Length > 0 ? "Discord · " + channel : "Discord · no voice channel");
+        _discordDot.Fill = Live.Blend(_discordDot.Fill, Of(channel.Length > 0 ? "GoodBrush" : "SubtleBrush"), this);
+        Live.Show(_discord, true, this);
+        for (int i = 0; i < apps.Count; i++)
+        {
+            if (i < _apps.Children.Count && _apps.Children[i] is DemoRow row) { row.Set(apps[i].Volume); continue; }
+            var made = new DemoRow(apps[i].Name, apps[i].Exe, apps[i].Volume);
+            _apps.Children.Add(made);
+            Live.Arrive(made, this, i);
+        }
+    }
+
+    sealed class DemoRow : Grid
+    {
+        readonly Meter _level = new(86);
+        readonly TextBlock _percent = new() { FontSize = 11, Width = 32, TextAlignment = TextAlignment.Right, VerticalAlignment = VerticalAlignment.Center };
+
+        public DemoRow(string name, string exe, double volume)
+        {
+            Margin = new Thickness(0, 3, 0, 3);
+            foreach (var w in new[] { GridLength.Auto, GridLength.Auto, new GridLength(1, GridUnitType.Star), GridLength.Auto, GridLength.Auto })
+                ColumnDefinitions.Add(new ColumnDefinition { Width = w });
+            var icon = new Image { Width = 16, Height = 16, VerticalAlignment = VerticalAlignment.Center, Source = File.Exists(exe) ? ShortcutsWidget.Icon(exe) : null };
+            var label = new TextBlock { Text = name, FontSize = 11.5, Width = 78, TextTrimming = TextTrimming.CharacterEllipsis, VerticalAlignment = VerticalAlignment.Center, Margin = new Thickness(6, 0, 6, 0) };
+            var track = new Border { Background = Brushes.Transparent, Padding = new Thickness(0, 6, 0, 6), Child = _level };
+            var mute = Key("", () => { }, icon: true, size: 12, tip: "Mute this app");
+            _level.Colour = Of("AccentBrush");
+            UIElement[] parts = { icon, label, track, _percent, mute };
+            for (int c = 0; c < parts.Length; c++) { SetColumn(parts[c], c); Children.Add(parts[c]); }
+            Set(volume);
+        }
+
+        public void Set(double volume)
+        {
+            _level.Glide(volume, 400);
+            _percent.Say($"{Math.Round(volume * 100)}%", quick: true);
+        }
+    }
+
     void Tick()
     {
+        if (Demo) return;
         ShowMic();
         string? camera = PrivacyWatch.CameraUser();
         if (camera != null) _camera.Say("Camera in use · " + camera);

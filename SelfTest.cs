@@ -12,7 +12,7 @@ namespace PitzkiWidgets;
 /// off-screen, left to settle, and saved as a picture, with a line of words about what it said.
 /// Run it with PITZKI_WIDGETS_TEST=1.
 /// </summary>
-static class SelfTest
+static partial class SelfTest
 {
     public static bool Wanted => Environment.GetEnvironmentVariable("PITZKI_WIDGETS_TEST") == "1";
 
@@ -960,6 +960,17 @@ static class SelfTest
             if (Environment.GetEnvironmentVariable("PITZKI_WIDGETS_ONLY") == "life")
             {
                 try { await LifeCheck(dir, log); }
+                catch (Exception bad) { log.Add("BROKE: " + bad); }
+                had.Save();
+                File.WriteAllText(Path.Combine(dir, "widgets.txt"), string.Join(Environment.NewLine, log));
+                Application.Current.Shutdown();
+                return;
+            }
+
+            // PITZKI_WIDGETS_ONLY=film films every card for the README, with made-up things (Film.cs)
+            if (Environment.GetEnvironmentVariable("PITZKI_WIDGETS_ONLY") == "film")
+            {
+                try { await FilmAll(app, dir, log); }
                 catch (Exception bad) { log.Add("BROKE: " + bad); }
                 had.Save();
                 File.WriteAllText(Path.Combine(dir, "widgets.txt"), string.Join(Environment.NewLine, log));

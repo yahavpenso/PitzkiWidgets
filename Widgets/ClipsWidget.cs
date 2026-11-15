@@ -147,8 +147,12 @@ public sealed class ClipsWidget : UserControl
         }
     }
 
+    /// <summary>For the README clips: made-up pictures instead of this PC's own.</summary>
+    internal static List<Clip>? Pretend;
+
     internal static List<Clip> Scan()
     {
+        if (Pretend != null) return Pretend;
         var all = new List<Clip>();
         int looked = 0;
 

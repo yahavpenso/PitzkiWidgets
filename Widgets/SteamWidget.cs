@@ -31,8 +31,19 @@ public sealed class SteamWidget : UserControl
         this.Every(5, Tick);
     }
 
-    void Tick()
+    /// <summary>For the README clips: made-up words instead of this PC's own Steam. Part below 0 hides the bar.</summary>
+    internal (string Head, string Under, double Part)? Demo;
+
+    internal void Tick()
     {
+        if (Demo is { } demo)
+        {
+            _headline.Say(demo.Head);
+            _under.Say(demo.Under);
+            Live.Show(_along, demo.Part >= 0, this);
+            if (demo.Part >= 0) { _along.Colour = Of("AccentBrush"); _along.Glide(demo.Part, 900); }
+            return;
+        }
         if (!_steam.Installed)
         {
             _headline.Say("No Steam here");

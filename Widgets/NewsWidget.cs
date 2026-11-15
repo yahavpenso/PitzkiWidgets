@@ -66,8 +66,12 @@ public sealed class NewsWidget : UserControl
     }
 
     /// <summary>The newest patch of each recent game, newest first. A reason is given when there is nothing to show.</summary>
+    /// <summary>For the README clips: made-up patches instead of this PC's own games.</summary>
+    internal static List<Patch>? Pretend;
+
     (List<Patch> Patches, string Reason) Gather()
     {
+        if (Pretend != null) return (Pretend, "");
         if (!_steam.Installed) return (new(), "No Steam here, so no games to ask about.");
 
         var mine = _steam.Games().Where(g => g.Installed).OrderByDescending(g => g.LastPlayed).Take(Games).ToList();

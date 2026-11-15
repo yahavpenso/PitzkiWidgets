@@ -60,7 +60,10 @@ public sealed class ClipboardWidget : UserControl
         catch { return ""; }   // another program had the clipboard open: try again next time
     }
 
-    void Look() => Took(OnClipboard());
+    /// <summary>For the README clips: the real clipboard is never looked at, only made-up text is shown.</summary>
+    internal static bool Demo;
+
+    void Look() { if (!Demo) Took(OnClipboard()); }
 
     /// <summary>Something was copied. The tests call this with made-up text instead of a real clipboard.</summary>
     internal void Took(string text)

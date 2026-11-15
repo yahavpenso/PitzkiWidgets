@@ -100,6 +100,8 @@ public sealed class PhotosWidget : UserControl
         _empty.Text = _files.Count == 0 ? "No photos in this folder yet.\nPick another with the folder button." : "";
     }
 
+    internal void Next() => Step(1);
+
     void Step(int by)
     {
         Scan();

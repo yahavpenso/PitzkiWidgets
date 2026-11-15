@@ -35,6 +35,8 @@ public sealed class MusicWidget : UserControl
     /// <summary>For the tests: the line on the card now, and whether the song has timed words.</summary>
     internal string Sung => _sung.Text;
     internal bool HasLyrics => _lyrics.HasLyrics;
+    /// <summary>For the README clips: its ShowDemo puts a made-up song on the card.</summary>
+    internal MediaService Media => _media;
 
     public MusicWidget()
     {

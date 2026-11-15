@@ -89,8 +89,12 @@ public sealed class DiscordWidget : UserControl
         this.Every(2, Tick);
     }
 
+    /// <summary>For the README clips: Discord is not asked, only what Feed puts on the card.</summary>
+    internal static bool Demo;
+
     void Tick()
     {
+        if (Demo) return;
         if (!_watching) { _watching = true; _notes.Arrived += (app, _, _) => Dispatcher.BeginInvoke(() => MessageFrom(app)); }   // only the app's name is used
         if (_ticks++ % 2 == 0) _notes.Poll();
         _ = SoundWidget.Voice.Keep();
