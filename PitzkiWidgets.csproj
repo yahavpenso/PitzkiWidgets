@@ -1,0 +1,66 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
+    <SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>PitzkiWidgets</AssemblyName>
+    <RootNamespace>PitzkiWidgets</RootNamespace>
+    <Version>1.19.0-w.1</Version>
+    <Product>Pitzki Widgets</Product>
+    <Description>Little widgets for the Windows desktop</Description>
+    <ConcurrentGarbageCollection>false</ConcurrentGarbageCollection>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+    <ApplicationIcon>Assets\icon.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Using Remove="System.Windows.Forms" />
+    <Using Remove="System.Drawing" />
+  </ItemGroup>
+
+  <!-- Shared with Pitzki itself, so the two never drift apart: the same Pitzki, the same readings. -->
+  <ItemGroup>
+    <Page Include="..\Piztki\Controls\Mascot.xaml" Link="Controls\Mascot.xaml" />
+    <Compile Include="..\Piztki\Controls\Mascot.xaml.cs" Link="Controls\Mascot.xaml.cs" />
+    <Compile Include="..\Piztki\Controls\Mascot.Life.cs" Link="Controls\Mascot.Life.cs" />
+    <Compile Include="..\Piztki\Core\BeatService.cs" Link="Core\BeatService.cs" />
+    <Compile Include="..\Piztki\Core\NotificationWatch.cs" Link="Core\NotificationWatch.cs" />
+    <Compile Include="..\Piztki\Core\Fx.cs" Link="Core\Fx.cs" />
+    <Compile Include="..\Piztki\Core\SystemInfo.cs" Link="Core\SystemInfo.cs" />
+    <Compile Include="..\Piztki\Core\DiskWatch.cs" Link="Core\DiskWatch.cs" />
+    <Compile Include="..\Piztki\Core\RobRunLive.cs" Link="Core\RobRunLive.cs" />
+    <Compile Include="..\Piztki\Core\MediaService.cs" Link="Core\MediaService.cs" />
+    <Compile Include="..\Piztki\Core\Palette.cs" Link="Core\Palette.cs" />
+    <Compile Include="..\Piztki\Core\SteamLocal.cs" Link="Core\SteamLocal.cs" />
+    <Compile Include="..\Piztki\Core\Cs2Skins.cs" Link="Core\Cs2Skins.cs" />
+    <Compile Include="..\Piztki\Core\Cs2Inventory.cs" Link="Core\Cs2Inventory.cs" />
+    <Compile Include="..\Piztki\Core\SteamItems.cs" Link="Core\SteamItems.cs" />
+    <Compile Include="..\Piztki\Core\Market.cs" Link="Core\Market.cs" />
+    <Compile Include="..\Piztki\Core\MoneyPrefs.cs" Link="Core\MoneyPrefs.cs" />
+    <Compile Include="..\Piztki\Core\Cs2Cases.cs" Link="Core\Cs2Cases.cs" />
+    <Compile Include="..\Piztki\Core\Cs2Gsi.cs" Link="Core\Cs2Gsi.cs" />
+    <Compile Include="..\Piztki\Core\GpuLoad.cs" Link="Core\GpuLoad.cs" />
+    <Compile Include="..\Piztki\Core\DeviceBattery.cs" Link="Core\DeviceBattery.cs" />
+    <Compile Include="..\Piztki\Core\GlassLook.cs" Link="Core\GlassLook.cs" />
+    <Compile Include="..\Piztki\Core\Native.cs" Link="Core\Native.cs" />
+    <Compile Include="..\Piztki\Core\ScreenTime.cs" Link="Core\ScreenTime.cs" />
+    <Compile Include="..\Piztki\Core\Mixer.cs" Link="Core\Mixer.cs" />
+    <Compile Include="..\Piztki\Core\PrivacyWatch.cs" Link="Core\PrivacyWatch.cs" />
+    <Compile Include="..\Piztki\Core\DiscordRpc.cs" Link="Core\DiscordRpc.cs" />
+    <Compile Include="..\Piztki\Core\ClaudeUsage.cs" Link="Core\ClaudeUsage.cs" />
+    <Compile Include="..\Piztki\Core\LyricsService.cs" Link="Core\LyricsService.cs" />
+    <Compile Include="..\Piztki\Core\GameSessions.cs" Link="Core\GameSessions.cs" />
+    <Compile Include="..\Piztki\Core\Calc.cs" Link="Core\Calc.cs" />
+    <Compile Include="..\Piztki\Core\Rates.cs" Link="Core\Rates.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NAudio.Wasapi" Version="3.3.0" />
+  </ItemGroup>
+
+</Project>

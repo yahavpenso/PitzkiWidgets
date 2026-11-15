@@ -1,0 +1,171 @@
+<Window x:Class="PitzkiWidgets.TrayMenu"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:c="clr-namespace:Pitzki.Controls"
+        xmlns:core="clr-namespace:Pitzki.Core"
+        Title="Pitzki Widgets menu" Width="300" SizeToContent="Height"
+        WindowStyle="None" AllowsTransparency="True" Background="Transparent"
+        ResizeMode="NoResize" ShowInTaskbar="False" Topmost="True"
+        FontFamily="Segoe UI" Foreground="{StaticResource TextBrush}"
+        UseLayoutRounding="True" TextOptions.TextFormattingMode="Ideal">
+
+    <!-- drawn the same way as Pitzki's own tray menu (Piztki\TrayMenu.xaml), with switches for the on/off rows -->
+    <Window.Resources>
+        <Style x:Key="MenuRow" TargetType="Button">
+            <Setter Property="Height" Value="36"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Focusable" Value="False"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="core:Fx.Press" Value="True"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid Background="Transparent">
+                            <Border x:Name="Hover" CornerRadius="9" Background="#1CFFFFFF" Opacity="0"/>
+                            <ContentPresenter VerticalAlignment="Center" Margin="10,0"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Trigger.EnterActions><BeginStoryboard Storyboard="{StaticResource HoverIn}"/></Trigger.EnterActions>
+                                <Trigger.ExitActions><BeginStoryboard Storyboard="{StaticResource HoverOut}"/></Trigger.ExitActions>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="RowIcon" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="{StaticResource Icons}"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Width" Value="22"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Foreground" Value="{DynamicResource AccentBrush}"/>
+        </Style>
+        <Style x:Key="RowText" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
+        </Style>
+        <!-- the switch on a row: Pitzki's own, a little smaller, and the row itself takes the click -->
+        <Style x:Key="RowSwitch" TargetType="CheckBox" BasedOn="{StaticResource Switch}">
+            <Setter Property="IsHitTestVisible" Value="False"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+            <Setter Property="LayoutTransform">
+                <Setter.Value><ScaleTransform ScaleX="0.78" ScaleY="0.78"/></Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Border x:Name="Root" Margin="8" CornerRadius="14" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource SurfaceEdgeBrush}" BorderThickness="1"
+            Opacity="0" RenderTransformOrigin="1,1">
+        <StackPanel Margin="6">
+
+            <!-- who's talking -->
+            <Grid Margin="6,6,6,8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <c:Mascot x:Name="Face" Width="50" Height="40" Accent="{DynamicResource AccentBrush}"/>
+                <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="8,0,0,0">
+                    <TextBlock Text="Pitzki Widgets" FontFamily="Segoe UI" FontSize="14.5" FontWeight="SemiBold"/>
+                    <TextBlock x:Name="StatusText" Text="Little cards on your desktop" FontFamily="Segoe UI" FontSize="11.5" Foreground="{StaticResource SubtleBrush}"/>
+                </StackPanel>
+            </Grid>
+
+            <Border Height="1" Background="#16FFFFFF" Margin="6,0,6,4"/>
+
+            <Button x:Name="RowWidgets" Style="{StaticResource MenuRow}" Click="Widgets_Click">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="&#xE8A9;" Style="{StaticResource RowIcon}"/>
+                    <TextBlock Text="Widgets…" Style="{StaticResource RowText}"/>
+                </StackPanel>
+            </Button>
+
+            <Border Height="1" Background="#16FFFFFF" Margin="6,4"/>
+
+            <Button x:Name="RowLock" Style="{StaticResource MenuRow}" Click="Lock_Click">
+                <Grid>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="&#xE72E;" Style="{StaticResource RowIcon}"/>
+                        <TextBlock Text="Lock every card in place" Style="{StaticResource RowText}"/>
+                    </StackPanel>
+                    <CheckBox x:Name="LockSwitch" Style="{StaticResource RowSwitch}"/>
+                </Grid>
+            </Button>
+            <Button x:Name="RowSnap" Style="{StaticResource MenuRow}" Click="Snap_Click">
+                <Grid>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="&#xE8FD;" Style="{StaticResource RowIcon}"/>
+                        <TextBlock Text="Line cards up with each other" Style="{StaticResource RowText}"/>
+                    </StackPanel>
+                    <CheckBox x:Name="SnapSwitch" Style="{StaticResource RowSwitch}"/>
+                </Grid>
+            </Button>
+            <Button x:Name="RowJoin" Style="{StaticResource MenuRow}" Click="Join_Click">
+                <Grid>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="&#xE71B;" Style="{StaticResource RowIcon}"/>
+                        <TextBlock Text="Join cards dropped together" Style="{StaticResource RowText}"/>
+                    </StackPanel>
+                    <CheckBox x:Name="JoinSwitch" Style="{StaticResource RowSwitch}"/>
+                </Grid>
+            </Button>
+            <Button x:Name="RowGlass" Style="{StaticResource MenuRow}" Click="Glass_Click">
+                <Grid>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="&#xE790;" Style="{StaticResource RowIcon}"/>
+                        <TextBlock Text="Liquid glass" Style="{StaticResource RowText}"/>
+                    </StackPanel>
+                    <CheckBox x:Name="GlassSwitch" Style="{StaticResource RowSwitch}"/>
+                </Grid>
+            </Button>
+
+            <Border Height="1" Background="#16FFFFFF" Margin="6,4"/>
+
+            <!-- profile: each click moves on to the next one -->
+            <Button x:Name="RowProfile" Style="{StaticResource MenuRow}" Click="Profile_Click">
+                <Grid>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="&#xE77B;" Style="{StaticResource RowIcon}"/>
+                        <TextBlock Text="Profile" Style="{StaticResource RowText}"/>
+                    </StackPanel>
+                    <Border HorizontalAlignment="Right" CornerRadius="8" Background="#16FFFFFF" Padding="9,3">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock x:Name="ProfileName" Text="All cards" FontFamily="Segoe UI" FontSize="12" VerticalAlignment="Center" Foreground="{DynamicResource AccentBrush}"/>
+                            <TextBlock Text="&#xE76C;" FontFamily="{StaticResource Icons}" FontSize="9" Margin="6,1,0,0" VerticalAlignment="Center" Foreground="{StaticResource SubtleBrush}"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </Button>
+            <Button x:Name="RowAuto" Style="{StaticResource MenuRow}" Click="Auto_Click">
+                <Grid>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="&#xE7FC;" Style="{StaticResource RowIcon}"/>
+                        <TextBlock Text="Switch to Game while playing" Style="{StaticResource RowText}"/>
+                    </StackPanel>
+                    <CheckBox x:Name="AutoSwitch" Style="{StaticResource RowSwitch}"/>
+                </Grid>
+            </Button>
+
+            <Border Height="1" Background="#16FFFFFF" Margin="6,4"/>
+
+            <Button x:Name="RowRestart" Style="{StaticResource MenuRow}" Click="Restart_Click">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="&#xE72C;" Style="{StaticResource RowIcon}"/>
+                    <TextBlock Text="Refresh" Style="{StaticResource RowText}"/>
+                </StackPanel>
+            </Button>
+            <Button x:Name="RowQuit" Style="{StaticResource MenuRow}" Click="Quit_Click">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="&#xE7E8;" Style="{StaticResource RowIcon}" Foreground="#F09595"/>
+                    <TextBlock Text="Quit Pitzki Widgets" Style="{StaticResource RowText}"/>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+    </Border>
+</Window>

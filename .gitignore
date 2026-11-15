@@ -1,0 +1,17 @@
+# build output
+bin/
+obj/
+dist/
+
+# screenshots from test runs
+shots/
+
+# editor and OS clutter
+.vs/
+*.user
+Thumbs.db
+desktop.ini
+
+# preview screenshots (may show personal data)
+*-preview.png
+pitzki-versions.md
