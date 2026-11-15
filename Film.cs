@@ -16,7 +16,8 @@ namespace PitzkiWidgets;
 /// </summary>
 static partial class SelfTest
 {
-    const double FilmScale = 1.5, Fps = 12;
+    static double FilmScale = 1.5;
+    const double Fps = 12;
 
     sealed record Cue(double At, Func<Task> Do);
     static Cue At(double at, Action act) => new(at, () => { act(); return Task.CompletedTask; });
@@ -392,6 +393,100 @@ static partial class SelfTest
             Pitzki.Controls.Mascot.CaseForce = "";
             await Film(root, "life-" + scene, scene == "case" ? 12 : 8, () => new[] { window }, null, log);
             window.Close();
+        }
+
+        // ----- every scene Pitzki has, one still each, for a grid in the README -----
+        if (Want("scenes"))
+        {
+            string stills = Path.Combine(root, "scenes");
+            Directory.CreateDirectory(stills);
+            foreach (var scene in Pitzki.Controls.Mascot.Hobbies.Concat(Pitzki.Controls.Mascot.Special))
+            {
+                var him = new Pitzki.Controls.Mascot { Width = 300, Height = 240 };
+                var stage = new Grid { Width = 300, Height = 240, Background = Brushes.Transparent };
+                stage.Children.Add(him);
+                var window = new Window
+                {
+                    WindowStyle = WindowStyle.None, AllowsTransparency = true, Background = Brushes.Transparent, ResizeMode = ResizeMode.NoResize,
+                    ShowInTaskbar = false, ShowActivated = false, Left = Far, Top = Far, SizeToContent = SizeToContent.WidthAndHeight, Content = stage,
+                };
+                window.Show();
+                await Task.Delay(500);
+                if (scene == "case") Pitzki.Controls.Mascot.CaseForce = "gold";
+                bool began = him.StartHobby(scene);
+                Pitzki.Controls.Mascot.CaseForce = "";
+                await Task.Delay(scene is "case" or "boot" ? 4200 : 2300);
+                var shot = Frame(new List<Window> { window }, null);
+                if (shot != null)
+                {
+                    var encoder = new PngBitmapEncoder();
+                    encoder.Frames.Add(BitmapFrame.Create(shot));
+                    using var file = File.Create(Path.Combine(stills, scene + ".png"));
+                    encoder.Save(file);
+                }
+                log.Add($"scene {scene}: started={began}");
+                him.StopHobby();
+                window.Close();
+            }
+        }
+
+        // ----- a whole desktop at once: several cards living side by side, and Pitzki playing guitar -----
+        if (Want("desk"))
+        {
+            FilmScale = 1.0;
+            var spots = new (string Kind, double X, double Y, Action<Placed>? Setup)[]
+            {
+                ("clock", 20, 20, null), ("weather", 20, 175, null),
+                ("system", 270, 20, null), ("music", 270, 300, null),
+                ("stocks", 530, 20, p => p.Text = "AAPL, NVDA, MSFT, TSLA, ^GSPC"),
+                ("tasks", 840, 20, p => p.Items.AddRange(new[] { "1|Send the invoice", "0|Call the dentist", "0|Water the plants" })),
+            };
+            var open = new List<Window>();
+            foreach (var (kind, x, y, setup) in spots)
+            {
+                var placed = new Placed { Kind = kind, X = Far + x, Y = Far + y };
+                setup?.Invoke(placed);
+                var w = new WidgetWindow(placed);
+                w.Show();
+                w.Left = Far + x; w.Top = Far + y;
+                open.Add(w);
+            }
+            var him = new Pitzki.Controls.Mascot { Width = 300, Height = 240 };
+            var stage = new Grid { Width = 300, Height = 240, Background = Brushes.Transparent };
+            stage.Children.Add(him);
+            var pal = new Window
+            {
+                WindowStyle = WindowStyle.None, AllowsTransparency = true, Background = Brushes.Transparent, ResizeMode = ResizeMode.NoResize,
+                ShowInTaskbar = false, ShowActivated = false, Left = Far + 560, Top = Far + 370, SizeToContent = SizeToContent.WidthAndHeight, Content = stage,
+            };
+            pal.Show();
+            open.Add(pal);
+            await Task.Delay(4500);
+            foreach (var w in open.OfType<WidgetWindow>())
+            {
+                switch (w.Body.Content)
+                {
+                    case WeatherWidget wx: wx.Weather("rain"); break;
+                    case SystemWidget s: s.Demo(); break;
+                    case MusicWidget m: m.Media.ShowDemo("Midnight Drive", "The Pixel Cats", Cover(), TimeSpan.FromSeconds(214), TimeSpan.FromSeconds(71)); break;
+                }
+            }
+            him.StartHobby("guitar");
+            await Task.Delay(600);
+            var stocks = open.OfType<WidgetWindow>().First(w => w.Placed.Kind == "stocks");
+            var tasks = open.OfType<WidgetWindow>().First(w => w.Placed.Kind == "tasks");
+            await Film(root, "desk", 8, () => open, new Rect(Far, Far, 1100, 620), log,
+                At(2.0, () =>
+                {
+                    if (stocks.Body.Content is not StocksWidget s || !s.Shown.Any()) return;
+                    var first = s.Shown.First();
+                    double now = Dollars(first.Price);
+                    if (now > 0) s.Feed(new[] { new StockQuote(first.Symbol, "Apple Inc.", "USD", Math.Round(now * 1.012, 2), now / 1.004, new List<double> { now / 1.004, now * 0.998, now * 1.004, now * 1.012 }, true) });
+                }),
+                At(3.5, () => (tasks.Body.Content as TasksWidget)?.Add("Book the flight")),
+                At(5.0, () => (open.OfType<WidgetWindow>().First(w => w.Placed.Kind == "weather").Body.Content as WeatherWidget)?.Weather("sun")));
+            foreach (var w in open) w.Close();
+            FilmScale = 1.5;
         }
 
         // ----- the picker: the rows arrive, then a slow scroll down -----
