@@ -1,16 +1,26 @@
 # Pitzki Widgets
 
+<p>
+  <a href="https://github.com/yahavpenso/PitzkiWidgets/releases/latest"><img alt="Latest version" src="https://img.shields.io/github/v/release/yahavpenso/PitzkiWidgets?label=version&color=afa9ec"></a>
+  <a href="https://github.com/yahavpenso/PitzkiWidgets/releases"><img alt="Downloads" src="https://img.shields.io/github/downloads/yahavpenso/PitzkiWidgets/total?color=6a4cff"></a>
+  <img alt="Windows 10 and 11" src="https://img.shields.io/badge/Windows-10%20%7C%2011-5d7fe0">
+  <img alt="Free" src="https://img.shields.io/badge/price-free-3fb950">
+  <img alt="43 cards" src="https://img.shields.io/badge/cards-43-d4537e">
+  <img alt="No account" src="https://img.shields.io/badge/account-none%20needed-8b949e">
+</p>
+
 **Little live cards for your Windows desktop.** A clock, the weather, your tasks, the stock market, your PC, your music, Discord and your games, each on its own small card that sits right on the wallpaper, under your windows, and never gets in the way. Pitzki, the night-sky cube from [Piztki](https://github.com/yahavpenso/Piztki), lives in them too: he juggles, plays guitar, opens CS2 cases and reacts to what the other cards say.
 
 Free. No account, no ads, no tracking. **43 cards** to pick from.
 
-<p align="center"><img src="docs/cards.png" alt="Ten Pitzki Widgets cards on a desktop" width="760"></p>
+<p align="center"><img src="docs/media/desktop.gif" alt="A desktop with live cards: the clock, the weather, This PC, music, stocks and tasks, and Pitzki playing guitar" width="860"></p>
 
 <p align="center">
   <a href="https://github.com/yahavpenso/PitzkiWidgets/releases/latest"><b>⬇ Download the latest version</b></a>
   &nbsp;·&nbsp; <a href="https://yahavpenso.github.io/PitzkiWidgets/">Website</a>
   &nbsp;·&nbsp; <a href="https://github.com/yahavpenso/PitzkiWidgets/wiki">Help pages</a>
   &nbsp;·&nbsp; <a href="#install">How to install</a>
+  &nbsp;·&nbsp; <a href="#ready-made-setups">Setups</a>
   &nbsp;·&nbsp; <a href="#every-card">Every card</a>
   &nbsp;·&nbsp; <a href="#what-each-card-uses">What each card uses</a>
   &nbsp;·&nbsp; <a href="#games">Games</a>
@@ -26,6 +36,29 @@ Free. No account, no ads, no tracking. **43 cards** to pick from.
 Click the Pitzki Widgets icon next to the clock and choose **Widgets…**. Every card has a switch: turn it on and the card pops onto your desktop, turn it off and it leaves.
 
 <p align="center"><img src="docs/media/picker.gif" alt="The window where you switch cards on and off" width="360"></p>
+
+## Ready-made setups
+
+Not sure where to start? Here are three desks to copy. Switch these cards on, and drag them where you like.
+
+<table>
+<tr><td valign="top"><b>🎮 The gamer</b><br><sub>CS2 inventory, Discord, Steam, Last game, Game updates, This PC. Mark them <b>Game</b> and they appear by themselves when you play.</sub><br><img src="docs/setup-gamer.png" alt="Gamer setup" width="100%"></td></tr>
+<tr><td valign="top"><b>📈 The investor</b><br><sub>Stocks, Stock chart, My portfolio, Market hours, Crypto, Market news. Turn on the bell on Stocks for a note when something moves.</sub><br><img src="docs/setup-investor.png" alt="Investor setup" width="100%"></td></tr>
+<tr><td valign="top"><b>📚 The student</b><br><sub>Clock, Focus rounds, Tasks, What's next, Note, Weather. Mark them <b>Work</b>, so they step aside while you game.</sub><br><img src="docs/setup-student.png" alt="Student setup" width="100%"></td></tr>
+</table>
+
+## Tips and tricks
+
+- **Hold Alt while dragging** to place a card exactly where you want, without lining up.
+- **Drop one card on another** and they join into one. Drag the thin line on top of a part to pull it out again.
+- **Double-click the Pitzki card** and he jumps out to go exploring: he walks along your screen, climbs onto windows and sits on them. Click him and he goes home.
+- **Click Pitzki at night** to wake him up for half an hour.
+- **Right-click a card, Hide at the screen edge**: it tucks away and slides out when you touch the edge.
+- **Write stocks by name**: `Apple, Nvidia, S&P 500, bitcoin` all work, no symbols needed.
+- **Type sums, units and money** in the Calculator: `20 usd to eur`, `5 km to mi`, `2^10`.
+- **Mark cards Work or Game** and switch on *Switch to Game while playing*: your desk changes by itself when a game starts.
+- **The $ button** on the skin cards switches between dollars and shekels.
+- **Refresh** in the tray menu restarts the app without losing anything.
 
 ## Every card
 
@@ -159,7 +192,11 @@ The Pitzki card is not a picture. About once a minute he does something of his o
 </tr>
 </table>
 
-And about thirty more: juggling, yo-yo, drums, bowling, fishing, kite, painting, yoga, a cat, knife tricks, pancakes, holidays, a rare alien...
+### All 38 of them
+
+Some come only at the right time: coffee in the morning, a movie on the weekend, an umbrella when it rains, a popsicle on hot days, and the holidays on their days. The alien is rare: once in a long while, and never twice a day.
+
+<p align="center"><img src="docs/pitzki-scenes.png" alt="Every scene Pitzki can do" width="760"></p>
 
 ## Made to stay out of the way
 
@@ -183,6 +220,36 @@ And about thirty more: juggling, yo-yo, drums, bowling, fishing, kite, painting,
 - **Live numbers.** Nothing jumps: numbers roll up or down, bars slide, colours fade, new rows slide in.
 - **Light on your PC.** Cards hidden behind a full-screen window or game stop drawing, and animations are capped at 30 frames a second.
 - **Start menu and start with Windows.** Both are switches in the Widgets window.
+
+## How it compares
+
+| | **Pitzki Widgets** | Windows Widgets | Rainmeter |
+|---|---|---|---|
+| Lives on the desktop, under your windows | ✅ | ❌ (a panel you open) | ✅ |
+| Ready the moment you run it | ✅ | ✅ | ❌ (you pick and set up skins) |
+| Set up by clicking, no files to edit | ✅ | ✅ | ❌ (skins are text files) |
+| Cards for games: CS2 skins, Steam, Discord, last match | ✅ | ❌ | Some, through skins |
+| Stocks, crypto, a pretend portfolio | ✅ | Stocks | Some, through skins |
+| Joins cards, lines them up, Work and Game profiles | ✅ | ❌ | ❌ |
+| A mascot with a life of his own | ✅ | ❌ | ❌ |
+| Needs an account | ❌ | Microsoft account for some | ❌ |
+| Make your own designs from scratch | ❌ | ❌ | ✅ (its biggest strength) |
+
+## What's new
+
+**1.19** · A pencil on **This PC**: hide the rows you don't need (CPU, graphics, memory, network, battery).
+
+**1.18 and 1.17** · Much lighter on the processor: covered cards stop drawing, animations stop at 30 frames a second, slow readings move to the background. The cards come in one after another when the app starts.
+
+**1.15** · The **Money** group: stock chart, portfolio, indexes, market hours, pretend portfolio, higher or lower, market news, crypto, dollar and euro, money converter. Plus the skin cards: All my Steam, Skin watch list, Is opening worth it?
+
+**1.14 and 1.13** · Steam items, Stocks and CS2 inventory.
+
+Every version is on the [Releases page](https://github.com/yahavpenso/PitzkiWidgets/releases).
+
+## Have an idea for a card?
+
+Tell us! [**Suggest a card**](https://github.com/yahavpenso/PitzkiWidgets/issues/new?template=card-idea.yml) takes a minute: what it shows and why you'd want it on your desktop. Found something broken? [Report a bug](https://github.com/yahavpenso/PitzkiWidgets/issues/new?template=bug.yml).
 
 ## What each card uses
 

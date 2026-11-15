@@ -1,0 +1,25 @@
+name: Something is broken
+description: A card shows something wrong, or the app misbehaves
+title: "Bug: "
+labels: ["bug"]
+body:
+  - type: input
+    id: card
+    attributes:
+      label: Which card?
+      placeholder: "For example: Stocks"
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened, and what did you expect?
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      placeholder: "Right-click PitzkiWidgets.exe, Properties, Details"
+  - type: textarea
+    id: shot
+    attributes:
+      label: A screenshot, if you can (check there is nothing private in it)

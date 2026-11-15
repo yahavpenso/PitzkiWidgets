@@ -1,0 +1,25 @@
+name: Suggest a card
+description: An idea for a new card, or something an existing card could do
+title: "Card idea: "
+labels: ["idea"]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What would the card show?
+      placeholder: "For example: the next train from my station, counting down"
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why would you want it on your desktop?
+  - type: dropdown
+    id: group
+    attributes:
+      label: Which group would it be in?
+      options: [Everyday, Money, Your PC, Music and games, Not sure]
+  - type: textarea
+    id: pitzki
+    attributes:
+      label: Should Pitzki do something with it? (optional)
