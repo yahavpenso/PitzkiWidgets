@@ -515,8 +515,8 @@
         <p class="sub">Cards sit under every window, never show in the taskbar or Alt+Tab, line up with each other and the screen edge, and rest while a game covers them.</p>
       </div>
       <div class="two">
-        <figure class="reveal"><img src="media/join.gif" alt="Two cards joining into one" loading="lazy"><figcaption><b>Join cards</b>Drop one card on another and they become one. Pull them apart again any time.</figcaption></figure>
-        <figure class="reveal"><img src="glass.png" alt="Cards with Liquid Glass" loading="lazy"><figcaption><b>Liquid Glass</b>The wallpaper shows through, with a light on the edge. Three strengths, or off.</figcaption></figure>
+        <figure class="reveal"><img src="media/join.gif" alt="Two cards joining into one"><figcaption><b>Join cards</b>Drop one card on another and they become one. Pull them apart again any time.</figcaption></figure>
+        <figure class="reveal"><img src="glass.png" alt="Cards with Liquid Glass"><figcaption><b>Liquid Glass</b>The wallpaper shows through, with a light on the edge. Three strengths, or off.</figcaption></figure>
       </div>
       <div class="grid">
         <div class="card reveal"><h3>Four sizes</h3><p>Small, Normal, Big or Huge, from the right-click menu.</p></div>
@@ -579,7 +579,7 @@
   // The loading screen: waits for every clip on the page (they are real GIFs, a few MB in all), then lifts.
   (() => {
     const loader = document.getElementById('loader'), fill = document.getElementById('loader-fill'), count = document.getElementById('loader-count');
-    const imgs = [...document.images].filter(i => !i.closest('.loader'));
+    const imgs = [...document.images].filter(i => !i.closest(".loader") && i.loading !== "lazy");
     let done = 0, closed = false;
     const close = () => { if (closed) return; closed = true; loader.classList.add('gone'); document.body.classList.remove('loading'); setTimeout(() => loader.remove(), 700); };
     const one = () => {
