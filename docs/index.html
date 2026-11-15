@@ -197,6 +197,7 @@
   table.games td:first-child { font-weight: 600; white-space: nowrap; }
   @media (max-width: 640px) { table.games td:first-child { white-space: normal; } }
 </style>
+<link rel="stylesheet" href="play.css">
 </head>
 <body>
 
@@ -240,6 +241,7 @@
 <nav>
   <div class="wrap">
     <a class="brand" href="#top"><img src="icon.png" alt="">Pitzki Widgets</a>
+    <a class="link" href="#try">Try it</a>
     <a class="link" href="#cards">Cards</a>
     <a class="link" href="#pitzki">Pitzki</a>
     <a class="link" href="#games">Games</a>
@@ -256,11 +258,24 @@
       <p class="lead">A clock, the weather, your tasks, the stock market, your PC, your music, Discord and your games, each on its own small card that sits on the wallpaper. And Pitzki lives in them.</p>
       <div class="cta">
         <a class="button" href="https://github.com/yahavpenso/PitzkiWidgets/releases/latest">Download for Windows</a>
-        <a class="ghost" href="#cards">See all 43 cards</a>
+        <a class="ghost" href="#try">Try it right here</a>
       </div>
       <p class="note">Free · No account · No ads · Windows 10 and 11</p>
-      <div class="shot reveal"><img src="cards.png" alt="Ten Pitzki Widgets cards on a desktop"></div>
     </header>
+
+    <section id="try">
+      <div class="try-head reveal">
+        <p class="eyebrow">Try it right here</p>
+        <h2>A little desktop, with real cards on it</h2>
+        <p class="sub" style="margin:10px auto 0">Everything works like in the app: the numbers move, the tasks tick, the music plays and Pitzki dances. Play with it.</p>
+      </div>
+      <div class="try-hint reveal"><span><b>Drag</b> a card</span><span><b>Alt</b> while dragging: no lining up</span><span><b>Drop</b> one card on another: they join</span><span><b>Right-click</b> (or hold) a card: its menu</span><span><b>Click the tray icon</b> for settings</span><span><b>Double-click Pitzki</b>: he goes exploring</span></div>
+      <div class="desk-frame reveal"><div class="desk-sizer" id="desk-sizer"><div class="desk" id="desk">
+        <div class="taskbar"><button class="game-btn">🎮 Start a game</button><span class="app start">⊞</span><span class="app">📁</span><span class="app">🌐</span><span class="app">🎵</span>
+          <div class="tray"><button class="tray-icon" title="Pitzki Widgets"><img src="icon.png" alt="Pitzki Widgets menu"></button><div class="clock"></div></div></div>
+      </div></div></div>
+      <p class="note reveal" style="text-align:center">Your desk here is saved in this browser. "Put the cards back" in the tray menu starts it over.</p>
+    </section>
 
     <section id="cards">
       <div class="reveal" style="text-align:center">
@@ -449,15 +464,22 @@
       <div class="reveal">
         <p class="eyebrow">Pitzki lives here</p>
         <h2>Not a picture. A little life of his own</h2>
-        <p class="sub">About once a minute he does something: about thirty scenes, from guitar to opening a CS2 case. He dances to your music, sleeps at night, follows your mouse, and reacts to the other cards: a stock that jumped, a new clip, a game you won.</p>
+        <p class="sub">Click any of his 38 scenes to watch it, straight from the app. About once a minute he does one by himself, from guitar to opening a CS2 case. He dances to your music, sleeps at night, follows your mouse, and reacts to the other cards: a stock that jumped, a new clip, a game you won.</p>
       </div>
-      <div class="scenes">
-<figure class="scene reveal"><img src="media/life-guitar.gif" alt="Guitar" loading="lazy"><figcaption>Guitar</figcaption></figure>
-<figure class="scene reveal"><img src="media/life-pizza.gif" alt="Pizza" loading="lazy"><figcaption>Pizza</figcaption></figure>
-<figure class="scene reveal"><img src="media/life-case.gif" alt="Opening a CS2 case" loading="lazy"><figcaption>Opening a CS2 case</figcaption></figure>
-<figure class="scene reveal"><img src="media/life-skate.gif" alt="Skateboard" loading="lazy"><figcaption>Skateboard</figcaption></figure>
-<figure class="scene reveal"><img src="media/life-telescope.gif" alt="Stargazing" loading="lazy"><figcaption>Stargazing</figcaption></figure>
-<figure class="scene reveal"><img src="media/life-cocoa.gif" alt="Hot cocoa" loading="lazy"><figcaption>Hot cocoa</figcaption></figure>
+      <div class="pz">
+        <div class="pz-stage reveal">
+          <div class="pz-view" id="pz-view"><svg class="mascot" viewBox="0 -6 120 102" role="img" aria-label="Pitzki"></svg></div>
+          <div class="pz-name" id="pz-name">Pick a scene</div>
+          <div class="pz-tools">
+            <div class="row"><span>Make him...</span><div class="chips" id="pz-moves"><button data-move="jump">Jump</button><button data-move="wave">Wave</button><button data-move="dance">Dance</button><button data-move="dizzy">Spin</button><button data-move="cheer">Cheer</button><button data-move="sleep">Sleep</button></div></div>
+            <div class="row"><span>Glow</span><div class="swatches" id="pz-colors">
+              <button class="on" data-color="#afa9ec" style="background:#afa9ec" aria-label="Lavender"></button><button data-color="#ed93b1" style="background:#ed93b1" aria-label="Pink"></button>
+              <button data-color="#7fd6c2" style="background:#7fd6c2" aria-label="Mint"></button><button data-color="#fac775" style="background:#fac775" aria-label="Gold"></button>
+              <button data-color="#85b7eb" style="background:#85b7eb" aria-label="Sky"></button><button data-color="#f0997b" style="background:#f0997b" aria-label="Coral"></button></div></div>
+            <div class="row"><span>Hat</span><div class="chips" id="pz-hats"><button class="on" data-hat="">None</button><button data-hat="party">Party</button><button data-hat="crown">Crown</button><button data-hat="beanie">Beanie</button><button data-hat="bow">Bow</button></div></div>
+          </div>
+        </div>
+        <div class="pz-grid" id="pz-grid"></div>
       </div>
     </section>
 
@@ -528,6 +550,7 @@
   </footer>
 </main>
 
+<script>window.SCENES = [{"k": "cocoa", "n": "Hot cocoa", "when": ""}, {"k": "game", "n": "Video game", "when": ""}, {"k": "tv", "n": "TV", "when": ""}, {"k": "gum", "n": "Bubble gum", "when": ""}, {"k": "juggle", "n": "Juggling", "when": ""}, {"k": "balisong", "n": "Balisong tricks", "when": ""}, {"k": "karambit", "n": "Karambit tricks", "when": ""}, {"k": "case", "n": "CS2 case", "when": ""}, {"k": "pizza", "n": "Pizza", "when": ""}, {"k": "guitar", "n": "Guitar", "when": ""}, {"k": "skate", "n": "Skateboard", "when": ""}, {"k": "hoops", "n": "Basketball", "when": ""}, {"k": "balloon", "n": "Balloon", "when": ""}, {"k": "phone", "n": "Phone", "when": ""}, {"k": "fishing", "n": "Fishing", "when": ""}, {"k": "paint", "n": "Painting", "when": ""}, {"k": "yoga", "n": "Yoga", "when": ""}, {"k": "kite", "n": "Kite", "when": ""}, {"k": "cube", "n": "Puzzle cube", "when": ""}, {"k": "cat", "n": "A cat", "when": ""}, {"k": "pancake", "n": "Pancakes", "when": ""}, {"k": "sweep", "n": "Sweeping", "when": ""}, {"k": "bowling", "n": "Bowling", "when": ""}, {"k": "telescope", "n": "Stargazing", "when": ""}, {"k": "drums", "n": "Drums", "when": ""}, {"k": "yoyo", "n": "Yo-yo", "when": ""}, {"k": "coffee", "n": "Coffee", "when": "mornings"}, {"k": "movie", "n": "Movie", "when": "weekends"}, {"k": "birthday", "n": "Birthday", "when": "your birthday"}, {"k": "hello", "n": "Hello", "when": "when the app starts"}, {"k": "boot", "n": "Booting up", "when": "after the PC starts"}, {"k": "umbrella", "n": "Umbrella", "when": "when it rains"}, {"k": "popsicle", "n": "Popsicle", "when": "hot days"}, {"k": "hanukkah", "n": "Hanukkah", "when": "on the day"}, {"k": "christmas", "n": "Christmas", "when": "on the day"}, {"k": "purim", "n": "Purim", "when": "on the day"}, {"k": "newyear", "n": "New Year", "when": "on the day"}, {"k": "alien", "n": "A rare alien", "when": "very rare"}];</script>
 <script>
   const art = document.getElementById('mascot-art');
   document.querySelectorAll('svg.mascot').forEach(svg => svg.innerHTML = art.innerHTML);
@@ -567,5 +590,6 @@
   }, { threshold: 0.05 });
   document.querySelectorAll('.reveal').forEach(el => seen.observe(el));
 </script>
+<script src="play.js"></script>
 </body>
 </html>

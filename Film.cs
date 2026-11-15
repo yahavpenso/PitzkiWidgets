@@ -375,9 +375,13 @@ static partial class SelfTest
         }
 
         // ----- Pitzki's scenes, on a stage of their own -----
-        foreach (var scene in new[] { "guitar", "pizza", "case", "skate", "telescope", "cocoa" })
+        // PITZKI_FILM=life-all films every scene (smaller, for the website's scene picker)
+        bool all = only != null && only.Split(',').Contains("life-all");
+        var lifeList = all ? Pitzki.Controls.Mascot.Hobbies.Concat(Pitzki.Controls.Mascot.Special).ToArray() : new[] { "guitar", "pizza", "case", "skate", "telescope", "cocoa" };
+        if (all) FilmScale = 0.8;
+        foreach (var scene in lifeList)
         {
-            if (!Want("life-" + scene)) continue;
+            if (!all && !Want("life-" + scene)) continue;
             var him = new Pitzki.Controls.Mascot { Width = 300, Height = 240 };
             var stage = new Grid { Width = 300, Height = 240, Background = Brushes.Transparent };
             stage.Children.Add(him);
@@ -391,9 +395,10 @@ static partial class SelfTest
             if (scene == "case") Pitzki.Controls.Mascot.CaseForce = "gold";
             him.StartHobby(scene);
             Pitzki.Controls.Mascot.CaseForce = "";
-            await Film(root, "life-" + scene, scene == "case" ? 12 : 8, () => new[] { window }, null, log);
+            await Film(root, (all ? "all-" : "life-") + scene, scene == "case" ? 12 : all ? 7 : 8, () => new[] { window }, null, log);
             window.Close();
         }
+        FilmScale = 1.5;
 
         // ----- every scene Pitzki has, one still each, for a grid in the README -----
         if (Want("scenes"))
