@@ -8,6 +8,8 @@ Free. No account, no ads, no tracking. **43 cards** to pick from.
 
 <p align="center">
   <a href="https://github.com/yahavpenso/PitzkiWidgets/releases/latest"><b>⬇ Download the latest version</b></a>
+  &nbsp;·&nbsp; <a href="https://yahavpenso.github.io/PitzkiWidgets/">Website</a>
+  &nbsp;·&nbsp; <a href="https://github.com/yahavpenso/PitzkiWidgets/wiki">Help pages</a>
   &nbsp;·&nbsp; <a href="#install">How to install</a>
   &nbsp;·&nbsp; <a href="#every-card">Every card</a>
   &nbsp;·&nbsp; <a href="#what-each-card-uses">What each card uses</a>
