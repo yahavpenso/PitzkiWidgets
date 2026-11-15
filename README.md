@@ -9,6 +9,9 @@
   <img alt="No account" src="https://img.shields.io/badge/account-none%20needed-8b949e">
 </p>
 
+> [!TIP]
+> **It's nicer on the website.** Everything here, easier to read, and you can try the cards right in your browser: **[yahavpenso.github.io/PitzkiWidgets](https://yahavpenso.github.io/PitzkiWidgets/)**
+
 **Little live cards for your Windows desktop.** A clock, the weather, your tasks, the stock market, your PC, your music, Discord and your games, each on its own small card that sits right on the wallpaper, under your windows, and never gets in the way. Pitzki, the night-sky cube from [Piztki](https://github.com/yahavpenso/Piztki), lives in them too: he juggles, plays guitar, opens CS2 cases and reacts to what the other cards say.
 
 Free. No account, no ads, no tracking. **43 cards** to pick from.
