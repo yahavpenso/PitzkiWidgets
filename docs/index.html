@@ -214,10 +214,147 @@
   table.games td:first-child { font-weight: 600; white-space: nowrap; }
   @media (max-width: 640px) { table.games td:first-child { white-space: normal; } }
 </style>
-<link rel="stylesheet" href="play.css">
+<link rel="stylesheet" href="play.css?v=7">
+<!--brand-meta--><meta name="theme-color" content="#09090d"><meta property="og:type" content="website"><meta property="og:title" content="Pitzki Widgets: little live cards for your Windows desktop"><meta property="og:description" content="43 little live cards for your Windows desktop: clock, weather, tasks, stocks, music, Steam and more, with Pitzki living in them. Free, no account."><meta property="og:image" content="https://yahavpenso.github.io/PitzkiWidgets/social-preview.png"><meta property="og:url" content="https://yahavpenso.github.io/PitzkiWidgets/"><meta name="twitter:card" content="summary_large_image"><!--/brand-meta-->
+<style id="brand-css">
+  /* ===== shared Pitzki family look (same on all three sites) ===== */
+  :root { --b-notch: #afa9ec; --b-cards: #5dcaa5; --b-line: #ffffff14; --b-line2: #ffffff26; --b-faint: #6d6b7d; --b-ease: cubic-bezier(.2,.8,.2,1); }
+  body { -webkit-font-smoothing: antialiased; }
+  ::selection { background: var(--accent); color: #15131f; }
+  .b-grain { position: fixed; inset: -50%; z-index: -1; pointer-events: none; opacity: .05;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+  .b-family { position: relative; z-index: 31; background: #000; border-bottom: 1px solid var(--b-line); font-size: 13px; }
+  .b-family .b-in { max-width: 1160px; margin: 0 auto; padding: 0 22px; display: flex; align-items: center; gap: 4px; height: 38px; overflow-x: auto; scrollbar-width: none; }
+  .b-family .b-in::-webkit-scrollbar { display: none; }
+  .b-family a { color: #a3a1b4; text-decoration: none; padding: 5px 12px; border-radius: 999px; white-space: nowrap; display: flex; align-items: center; gap: 7px; transition: color .2s, background .2s; }
+  .b-family a:hover { color: #fff; background: #ffffff10; }
+  .b-family a.here { color: #fff; background: #ffffff14; }
+  .b-family a i { width: 7px; height: 7px; border-radius: 50%; }
+  .b-family .sp { margin-left: auto; }
+  nav { backdrop-filter: saturate(1.6) blur(18px) !important; -webkit-backdrop-filter: saturate(1.6) blur(18px); border-bottom-color: transparent !important; transition: border-color .3s, background .3s; }
+  nav.stuck { border-bottom-color: var(--b-line) !important; }
+  nav a.link { position: relative; }
+  nav a.link::after { content: ""; position: absolute; left: 0; right: 0; bottom: -6px; height: 2px; border-radius: 2px; background: var(--accent); transform: scaleX(0); transition: transform .3s var(--b-ease); }
+  nav a.link.on { color: var(--text); }
+  nav a.link.on::after { transform: scaleX(1); }
+  .hero h1 { font-family: "Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif; font-size: clamp(44px, 8vw, 92px) !important; line-height: 1.02 !important; letter-spacing: -.045em !important; font-weight: 700; }
+  .hero h1 span { background: linear-gradient(100deg, var(--b-notch) 10%, #d8d4ff 40%, var(--b-cards) 75%); -webkit-background-clip: text; background-clip: text; color: transparent !important;
+                  background-size: 200% 100%; animation: b-sheen 9s ease-in-out infinite alternate; }
+  @keyframes b-sheen { to { background-position: 100% 0; } }
+  .hero .lead { font-size: clamp(18px, 2.2vw, 21px) !important; line-height: 1.5; }
+  h2 { font-family: "Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif; font-size: clamp(32px, 5vw, 54px) !important; line-height: 1.06 !important; letter-spacing: -.035em !important; font-weight: 700; }
+  .eyebrow { display: inline-flex; align-items: center; gap: 8px; letter-spacing: 1.6px !important; }
+  .eyebrow::before { content: ""; width: 18px; height: 2px; border-radius: 2px; background: currentColor; }
+  .sub { font-size: 18px; line-height: 1.55; }
+  section { padding-top: 84px !important; padding-bottom: 84px !important; }
+  .button { transition: transform .25s cubic-bezier(.3,1.5,.5,1), filter .2s, box-shadow .3s !important; }
+  .button:hover { transform: translateY(-2px) scale(1.03) !important; box-shadow: 0 10px 30px -8px var(--accent); }
+  .ghost { border: 1px solid var(--b-line); }
+  .card, .tile { border-radius: 20px; }
+  .b-progress { position: fixed; left: 0; top: 0; height: 2px; width: 100%; z-index: 60; transform-origin: left; transform: scaleX(0); background: linear-gradient(90deg, var(--b-notch), var(--b-cards)); pointer-events: none; }
+  .b-top { position: fixed; right: 20px; bottom: 20px; z-index: 50; width: 46px; height: 46px; border-radius: 50%; border: 1px solid var(--b-line2); background: #15151bcc; backdrop-filter: blur(10px);
+           color: #fff; font-size: 18px; cursor: pointer; opacity: 0; transform: translateY(14px); pointer-events: none; transition: opacity .3s, transform .3s cubic-bezier(.3,1.5,.5,1); }
+  .b-top.show { opacity: 1; transform: none; pointer-events: auto; }
+  footer.b-footer { border-top: 1px solid var(--b-line); margin-top: 90px; padding: 56px 0 40px; color: #a3a1b4; font-size: 14px; text-align: left; background: #000000a0; }
+  .b-footer .b-in { max-width: 1160px; margin: 0 auto; padding: 0 22px; }
+  .b-cols { display: grid; grid-template-columns: 1.6fr repeat(3, 1fr); gap: 30px; }
+  @media (max-width: 760px) { .b-cols { grid-template-columns: 1fr 1fr; } .b-cols > :first-child { grid-column: span 2; } }
+  .b-cols h4 { color: #fff; font-size: 13.5px; margin: 0 0 12px; font-weight: 650; }
+  .b-cols a { display: block; color: #a3a1b4; text-decoration: none; padding: 4px 0; transition: color .2s; }
+  .b-cols a:hover { color: #fff; }
+  .b-brand { display: flex; align-items: center; gap: 10px; color: #fff; font-weight: 650; font-size: 17px; }
+  .b-brand img { width: 30px; height: 30px; border-radius: 8px; }
+  .b-blurb { margin-top: 12px; max-width: 300px; line-height: 1.55; }
+  .b-credits { margin-top: 34px; color: var(--b-faint); font-size: 13px; }
+  .b-bottom { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; border-top: 1px solid var(--b-line); margin-top: 18px; padding-top: 22px; color: var(--b-faint); font-size: 13px; }
+  @media (prefers-reduced-motion: reduce) { .hero h1 span { animation: none; } }
+</style>
+<style id="kit-css">
+  .k-badge { display: inline-flex; align-items: center; gap: 10px; padding: 6px 12px 6px 6px; border-radius: 999px; border: 1px solid #ffffff26; background: #ffffff0a;
+             font-size: 13.5px; color: var(--subtle); text-decoration: none; margin-bottom: 18px; transition: border-color .2s, background .2s; }
+  .k-badge:hover { border-color: #ffffff40; background: #ffffff12; }
+  .k-badge b { background: linear-gradient(90deg, #afa9ec, #5dcaa5); color: #15131f; font-size: 11.5px; padding: 3px 9px; border-radius: 999px; letter-spacing: .3px; }
+  .k-stats { display: grid; grid-template-columns: repeat(4, 1fr); margin: 30px auto 0; max-width: 940px; border-top: 1px solid #ffffff14; border-bottom: 1px solid #ffffff14; }
+  .k-stats div { padding: 26px 10px; text-align: center; }
+  .k-stats div + div { border-left: 1px solid #ffffff14; }
+  .k-stats b { display: block; font-size: clamp(30px, 4.4vw, 46px); font-weight: 700; letter-spacing: -.03em; line-height: 1.05; font-variant-numeric: tabular-nums; }
+  .k-stats span { color: var(--subtle); font-size: 14px; }
+  @media (max-width: 640px) { .k-stats { grid-template-columns: 1fr 1fr; } .k-stats div:nth-child(3) { border-left: 0; } .k-stats div:nth-child(n+3) { border-top: 1px solid #ffffff14; } }
+  .k-marquee { margin-top: 48px; overflow: hidden; mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); }
+  .k-marquee p { text-align: center; color: #6d6b7d; font-size: 12.5px; letter-spacing: 1.6px; text-transform: uppercase; margin-bottom: 16px; }
+  .k-track { display: flex; gap: 12px; width: max-content; animation: k-slide 40s linear infinite; }
+  .k-marquee:hover .k-track { animation-play-state: paused; }
+  @keyframes k-slide { to { transform: translateX(-50%); } }
+  .k-track span { padding: 9px 18px; border-radius: 999px; border: 1px solid #ffffff14; background: #ffffff08; color: var(--subtle); font-size: 15px; white-space: nowrap; font-weight: 500; }
+  .k-bento { display: grid; grid-template-columns: repeat(6, 1fr); grid-auto-rows: minmax(190px, auto); gap: 16px; margin-top: 40px; }
+  .k-tile { background: linear-gradient(180deg, #ffffff08, transparent 50%), #15151b; border: 1px solid #ffffff14; border-radius: 26px; padding: 26px; position: relative; overflow: hidden;
+            transition: transform .35s cubic-bezier(.3,1.5,.5,1), border-color .3s; }
+  .k-tile:hover { transform: translateY(-4px); border-color: #ffffff26; }
+  .k-tile h3 { font-size: 21px; letter-spacing: -.015em; margin: 0; }
+  .k-tile p { color: var(--subtle); font-size: 15.5px; margin-top: 8px; max-width: 420px; }
+  .k-t1 { grid-column: span 4; } .k-t2, .k-t3, .k-t4, .k-t5 { grid-column: span 2; } .k-t6 { grid-column: span 6; }
+  @media (max-width: 900px) { .k-bento { grid-template-columns: 1fr 1fr; } .k-t1, .k-t6 { grid-column: span 2; } .k-t2, .k-t3, .k-t4, .k-t5 { grid-column: span 1; } }
+  @media (max-width: 560px) { .k-bento { grid-template-columns: 1fr; } .k-bento > * { grid-column: span 1 !important; } }
+  .k-eq { display: flex; gap: 6px; align-items: flex-end; height: 70px; margin-top: 24px; }
+  .k-eq b { width: 10px; border-radius: 5px; background: linear-gradient(#afa9ec, #5dcaa5); animation: k-eq 1s ease-in-out infinite alternate; transform-origin: bottom; }
+  @keyframes k-eq { from { transform: scaleY(.25); } }
+  .k-lock { width: 60px; height: 60px; border-radius: 18px; display: grid; place-items: center; background: #ffffff10; border: 1px solid #ffffff26; margin-bottom: 16px; }
+  .k-lock svg { width: 28px; height: 28px; color: var(--accent); }
+  .k-num { font-size: 60px; font-weight: 700; letter-spacing: -.04em; line-height: 1; margin-top: 16px; background: linear-gradient(90deg, #afa9ec, #5dcaa5); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .k-meter { margin-top: 18px; display: grid; gap: 10px; }
+  .k-meter div { display: grid; grid-template-columns: 96px 1fr; gap: 10px; align-items: center; font-size: 13.5px; color: var(--subtle); }
+  .k-meter i { height: 8px; border-radius: 4px; background: #ffffff12; position: relative; overflow: hidden; }
+  .k-meter i::after { content: ""; position: absolute; inset: 0; width: var(--w); border-radius: 4px; background: var(--c, var(--accent)); transform-origin: left; transform: scaleX(0); transition: transform 1.2s cubic-bezier(.2,.8,.2,1); }
+  .k-tile.in .k-meter i::after { transform: scaleX(1); }
+  .k-sib { display: flex; flex-direction: column; justify-content: space-between; gap: 18px; background: radial-gradient(90% 140% at 100% 0%, var(--sib) 0, transparent 55%), #15151b; }
+  .k-sib::before { content: ""; position: absolute; inset: 0; background: radial-gradient(60% 90% at 100% 0%, var(--sib), transparent 60%); opacity: .25; pointer-events: none; }
+  .k-sib a.k-go { align-self: flex-start; display: inline-flex; gap: 8px; align-items: center; padding: 11px 22px; border-radius: 999px; background: var(--sib); color: #15131f; font-weight: 600; text-decoration: none;
+                  transition: transform .25s cubic-bezier(.3,1.5,.5,1); position: relative; }
+  .k-sib a.k-go:hover { transform: translateY(-2px) scale(1.03); }
+  /* the closing "Ready when you are" becomes a big card */
+  .big { margin: 40px 0 0; border-radius: 36px; padding: 80px 30px !important; position: relative; overflow: hidden; border: 1px solid #ffffff14;
+         background: radial-gradient(80% 120% at 0% 0%, #afa9ec33, transparent 60%), radial-gradient(80% 120% at 100% 100%, #5dcaa533, transparent 60%), #111116; }
+  .big h2 { font-size: clamp(38px, 6vw, 72px) !important; }
+  .k-family-link { margin-top: 18px; font-size: 15px; color: var(--subtle); }
+  .k-family-link a { color: var(--text); font-weight: 600; text-decoration: none; }
+  .k-family-link a:hover { text-decoration: underline; }
+</style>
+<style id="clips-css">
+  video.clip { display: block; max-width: 100%; }
+  .waiting video { opacity: 0; }
+  .tile video, .shot video, .two video { transition: opacity .5s ease; }
+  .tile video { display: block; width: 100%; height: auto; background: #1d1b33; }
+  .shot video, .two video, .scene video { display: block; width: 100%; }
+  .c-pitzki .stage video { position: absolute; inset: -6px -8px; width: calc(100% + 16px); height: calc(100% + 12px); object-fit: cover; border-radius: 10px; animation: rollIn .4s; }
+  .pz-view video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; animation: rollIn .4s; }
+</style>
+<style id="home-css">
+  .b-home { display: inline-flex; align-items: center; gap: 7px; padding: 7px 14px 7px 10px; border-radius: 999px; border: 1px solid #ffffff26; background: #ffffff0c;
+            color: var(--text) !important; text-decoration: none; font-size: 14px; font-weight: 600; white-space: nowrap; transition: background .2s, border-color .2s, transform .25s cubic-bezier(.3,1.5,.5,1); }
+  .b-home:hover { background: #ffffff1a; border-color: #ffffff40; transform: translateX(-2px); }
+  .b-home i { width: 18px; height: 18px; border-radius: 6px; background: linear-gradient(135deg, #afa9ec, #5dcaa5); display: grid; place-items: center; font-style: normal; font-size: 12px; color: #15131f; font-weight: 800; }
+  nav .brand { margin-right: 0 !important; white-space: nowrap; }
+  nav .b-home { margin-right: auto; margin-left: 4px; }
+  @media (max-width: 640px) { .b-home span { display: none; } .b-home { padding: 7px 9px; } }
+  /* the hero reads like the home site's: words first, Pitzki underneath */
+  .hero #hero-mascot { width: 140px !important; height: 118px !important; margin: 38px auto 0 !important; }
+  .hero > .pill { display: flex !important; width: fit-content; margin: 0 auto 22px !important; }
+  .hero .k-badge { display: flex; width: fit-content; margin: 0 auto 18px; }
+  .hero .button svg { width: 16px; height: 16px; margin-right: 8px; vertical-align: -2px; }
+</style>
+<style id="scroll-css">
+  /* a scrollbar that fits the site: thin, dark, with Pitzki's colours */
+  html { scrollbar-width: thin; scrollbar-color: #6f68b8 #0b0b10; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: #07070a; }
+  ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #afa9ec, #5dcaa5); border-radius: 10px; border: 3px solid #07070a; }
+  ::-webkit-scrollbar-thumb:hover { background: linear-gradient(180deg, #c4bff5, #7fdcbb); border-width: 2px; }
+  ::-webkit-scrollbar-corner { background: #07070a; }
+</style>
+<style id="demo-note-css">.demo-note{color:#6d6b7d;font-size:12.5px;text-align:center;margin:10px 0 0;font-style:italic}</style>
 </head>
 <body>
-
+<!--brand-top--><div class="b-progress" id="b-progress"></div><div class="b-grain"></div><div class="b-family"><div class="b-in"><a href="https://yahavpenso.github.io/"><i style="background:linear-gradient(90deg,#afa9ec,#5dcaa5)"></i>Pitzki home</a><a href="https://yahavpenso.github.io/Piztki/"><i style="background:#afa9ec"></i>Pitzki notch</a><a class="here" href="https://yahavpenso.github.io/PitzkiWidgets/"><i style="background:#5dcaa5"></i>Pitzki Widgets</a><a class="sp" href="https://github.com/yahavpenso">GitHub</a></div></div><!--/brand-top-->
 <div class="loader" id="loader" role="status" aria-live="polite">
   <svg class="mascot" viewBox="0 -6 120 102" aria-hidden="true"></svg>
   <b class="loader-title">Pitzki is setting up your desk...</b>
@@ -266,6 +403,7 @@
 <nav>
   <div class="wrap">
     <a class="brand" href="#top"><img src="icon.png" alt="">Pitzki Widgets</a>
+    <!--home-pill--><a class="b-home" href="https://yahavpenso.github.io/" title="Back to the Pitzki home page"><i>←</i><span>Pitzki home</span></a><!--/home-pill-->
     <a class="link" href="#try">Try it</a>
     <a class="link" href="#cards">Cards</a>
     <a class="link" href="#pitzki">Pitzki</a>
@@ -278,16 +416,17 @@
 <main id="top">
   <div class="wrap">
     <header class="hero">
-      <svg class="mascot" id="hero-mascot" viewBox="0 -6 120 102" role="img" aria-label="Pitzki, a night-sky cube with floating hands. Click to make him jump."></svg>
+      <!--kit-badge--><a class="k-badge" href="#pitzki"><b>NEW</b>Pitzki now has 38 little scenes of his own →</a><!--/kit-badge-->
       <h1>Little live cards for your <span>desktop</span></h1>
       <p class="lead">A clock, the weather, your tasks, the stock market, your PC, your music, Discord and your games, each on its own small card that sits on the wallpaper. And Pitzki lives in them.</p>
       <div class="cta">
-        <a class="button" href="https://github.com/yahavpenso/PitzkiWidgets/releases/latest">Download for Windows</a>
+        <a class="button" href="https://github.com/yahavpenso/PitzkiWidgets/releases/latest"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v10m-4.5-4.5L10 13l4.5-4.5M4 17h12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Download for Windows</a>
         <a class="ghost" href="#try">Try it right here</a>
       </div>
       <p class="note">Free · No account · No ads · Windows 10 and 11</p>
+      <svg class="mascot" id="hero-mascot" viewBox="0 -6 120 102" role="img" aria-label="Pitzki, a night-sky cube with floating hands. Click to make him jump."></svg>
     </header>
-
+    <!--kit-hero--><div class="k-stats reveal"><div><b><span data-kcount="43" style="color:inherit;font-size:inherit">0</span></b><span>live cards</span></div><div><b><span data-kcount="38" style="color:inherit;font-size:inherit">0</span></b><span>Pitzki scenes</span></div><div><b><span data-kcount="2" style="color:inherit;font-size:inherit">0</span></b><span>profiles: work and game</span></div><div><b>$<span data-kcount="0" style="color:inherit;font-size:inherit">0</span></b><span>forever</span></div></div><div class="k-marquee reveal"><p>Works with what you already use</p><div class="k-track"><span>Steam</span><span>Counter-Strike 2</span><span>Roblox</span><span>Discord</span><span>Spotify</span><span>Any music app</span><span>Stock prices</span><span>Crypto</span><span>Skinport</span><span>Weather anywhere</span><span>Steam</span><span>Counter-Strike 2</span><span>Roblox</span><span>Discord</span><span>Spotify</span><span>Any music app</span><span>Stock prices</span><span>Crypto</span><span>Skinport</span><span>Weather anywhere</span></div></div><!--/kit-hero-->
     <section id="try">
       <div class="try-head reveal">
         <p class="eyebrow">Try it right here</p>
@@ -296,10 +435,11 @@
       </div>
       <div class="try-hint reveal"><span><b>Drag</b> a card</span><span><b>Alt</b> while dragging: no lining up</span><span><b>Drop</b> one card on another: they join</span><span><b>Right-click</b> (or hold) a card: its menu</span><span><b>Click the tray icon</b> for settings</span><span><b>Double-click Pitzki</b>: he goes exploring</span></div>
       <div class="desk-frame reveal"><div class="desk-sizer" id="desk-sizer"><div class="desk" id="desk">
-        <div class="taskbar"><button class="game-btn">🎮 Start a game</button><span class="app start">⊞</span><span class="app">📁</span><span class="app">🌐</span><span class="app">🎵</span>
+        <div class="taskbar"><span class="app start">⊞</span><span class="app">📁</span><span class="app">🌐</span><span class="app">🎵</span>
           <div class="tray"><button class="tray-icon" title="Pitzki Widgets"><img src="icon.png" alt="Pitzki Widgets menu"></button><div class="clock"></div></div></div>
       </div></div></div>
-      <p class="note reveal" style="text-align:center">Your desk here is saved in this browser. "Put the cards back" in the tray menu starts it over.</p>
+      <p class="note reveal" style="text-align:center">Your desk here is saved in this browser. "Refresh" in the tray menu draws it again.</p>
+      <p class="demo-note">This desk is a demo built for the website. The real app may look and work a little differently.</p>
     </section>
 
     <section id="cards">
@@ -311,175 +451,175 @@
       <div class="chips" id="filter"><button class="on" data-g="">All 43</button><button data-g="Everyday">Everyday 14</button><button data-g="Money">Money 11</button><button data-g="Your PC">Your PC 7</button><button data-g="Music and games">Music and games 11</button></div>
       <div class="gallery">
       <figure class="tile reveal" data-g="Everyday">
-        <img src="media/pitzki.gif" alt="Pitzki" width="365" height="300" decoding="async">
+        <video class="clip" src="media/pitzki.mp4" data-gif="media/pitzki.gif" muted loop playsinline autoplay preload="auto" aria-label="Pitzki" width="365" height="300"></video>
         <figcaption><b>Pitzki</b><span>Pitzki sits on your desktop, blinks, follows your mouse, and about once a minute does something: juggling, guitar, pizza, a CS2 case. He dances to your music and sleeps at night.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Everyday">
-        <img src="media/clock.gif" alt="Clock" width="365" height="300" decoding="async">
+        <video class="clip" src="media/clock.mp4" data-gif="media/clock.gif" muted loop playsinline autoplay preload="auto" aria-label="Clock" width="365" height="300"></video>
         <figcaption><b>Clock</b><span>The time, big, with the date under it. Says morning, afternoon, evening or night.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Everyday">
-        <img src="media/calendar.gif" alt="Calendar" width="365" height="300" decoding="async">
+        <video class="clip" src="media/calendar.mp4" data-gif="media/calendar.gif" muted loop playsinline autoplay preload="auto" aria-label="Calendar" width="365" height="300"></video>
         <figcaption><b>Calendar</b><span>This month at a glance, with today marked.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Everyday">
-        <img src="media/weather.gif" alt="Weather" width="365" height="300" decoding="async">
+        <video class="clip" src="media/weather.mp4" data-gif="media/weather.gif" muted loop playsinline autoplay preload="auto" aria-label="Weather" width="365" height="300"></video>
         <figcaption><b>Weather</b><span>The temperature and the sky where you are, and Pitzki out in it: an umbrella in the rain, a hat in the snow, waving in the sun.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Everyday">
-        <img src="media/notes.gif" alt="Note" width="365" height="300" decoding="async">
+        <video class="clip" src="media/notes.mp4" data-gif="media/notes.gif" muted loop playsinline autoplay preload="auto" aria-label="Note" width="365" height="300"></video>
         <figcaption><b>Note</b><span>A sticky note you type straight onto the desktop. It saves by itself.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Everyday">
-        <img src="media/tasks.gif" alt="Tasks" width="365" height="300" decoding="async">
+        <video class="clip" src="media/tasks.mp4" data-gif="media/tasks.gif" muted loop playsinline autoplay preload="auto" aria-label="Tasks" width="365" height="300"></video>
         <figcaption><b>Tasks</b><span>A short to-do list. Tick things off, add with Enter, clear the done ones.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Everyday">
-        <img src="media/timer.gif" alt="Timer" width="365" height="300" decoding="async">
+        <video class="clip" src="media/timer.mp4" data-gif="media/timer.gif" muted loop playsinline autoplay preload="auto" aria-label="Timer" width="365" height="300"></video>
         <figcaption><b>Timer</b><span>Count down any number of minutes. Pitzki dances when it is up.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Everyday">
-        <img src="media/pomodoro.gif" alt="Focus rounds" width="365" height="300" decoding="async">
+        <video class="clip" src="media/pomodoro.mp4" data-gif="media/pomodoro.gif" muted loop playsinline autoplay preload="auto" aria-label="Focus rounds" width="365" height="300"></video>
         <figcaption><b>Focus rounds</b><span>25 minutes of work, 5 of rest, a long break after every fourth round, and a count of today&#x27;s rounds.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Everyday">
-        <img src="media/countdown.gif" alt="Countdown" width="365" height="300" decoding="async">
+        <video class="clip" src="media/countdown.mp4" data-gif="media/countdown.gif" muted loop playsinline autoplay preload="auto" aria-label="Countdown" width="365" height="300"></video>
         <figcaption><b>Countdown</b><span>How many days are left until a date that matters, with a bar of how far along you are.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Everyday">
-        <img src="media/agenda.gif" alt="What&#x27;s next" width="365" height="300" decoding="async">
+        <video class="clip" src="media/agenda.mp4" data-gif="media/agenda.gif" muted loop playsinline autoplay preload="auto" aria-label="What&#x27;s next" width="365" height="300"></video>
         <figcaption><b>What&#x27;s next</b><span>The next things in the calendar of this PC (read only), with how long until each one.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Everyday">
-        <img src="media/calc.gif" alt="Calculator" width="365" height="300" decoding="async">
+        <video class="clip" src="media/calc.mp4" data-gif="media/calc.gif" muted loop playsinline autoplay preload="auto" aria-label="Calculator" width="365" height="300"></video>
         <figcaption><b>Calculator</b><span>Type a sum, a unit or money and the answer appears as you type: 12*(3+4), 5 km to mi, 20 usd to eur.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Everyday">
-        <img src="media/worldclock.gif" alt="World clock" width="365" height="300" decoding="async">
+        <video class="clip" src="media/worldclock.mp4" data-gif="media/worldclock.gif" muted loop playsinline autoplay preload="auto" aria-label="World clock" width="365" height="300"></video>
         <figcaption><b>World clock</b><span>The time in three cities you choose, and how far ahead or behind they are.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Everyday">
-        <img src="media/photos.gif" alt="Photos" width="365" height="300" decoding="async">
+        <video class="clip" src="media/photos.mp4" data-gif="media/photos.gif" muted loop playsinline autoplay preload="auto" aria-label="Photos" width="365" height="300"></video>
         <figcaption><b>Photos</b><span>A picture frame for a folder of your photos. It moves on every few seconds.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Everyday">
-        <img src="media/shortcuts.gif" alt="Shortcuts" width="365" height="300" decoding="async">
+        <video class="clip" src="media/shortcuts.mp4" data-gif="media/shortcuts.gif" muted loop playsinline autoplay preload="auto" aria-label="Shortcuts" width="365" height="300"></video>
         <figcaption><b>Shortcuts</b><span>Your favourite programs and folders as icons, one click away. Drag them in from Explorer.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Money">
-        <img src="media/stocks.gif" alt="Stocks" width="365" height="300" decoding="async">
+        <video class="clip" src="media/stocks.mp4" data-gif="media/stocks.gif" muted loop playsinline autoplay preload="auto" aria-label="Stocks" width="365" height="300"></video>
         <figcaption><b>Stocks</b><span>Up to six stocks: the price, today&#x27;s move and a line of the day. A bell can tell you when one moves 2, 3, 5 or 10%.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Money">
-        <img src="media/chart.gif" alt="Stock chart" width="365" height="300" decoding="async">
+        <video class="clip" src="media/chart.mp4" data-gif="media/chart.gif" muted loop playsinline autoplay preload="auto" aria-label="Stock chart" width="365" height="300"></video>
         <figcaption><b>Stock chart</b><span>One stock, big, over a day, a week, a month, six months or a year.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Money">
-        <img src="media/portfolio.gif" alt="My portfolio" width="365" height="300" decoding="async">
+        <video class="clip" src="media/portfolio.mp4" data-gif="media/portfolio.gif" muted loop playsinline autoplay preload="auto" aria-label="My portfolio" width="365" height="300"></video>
         <figcaption><b>My portfolio</b><span>The shares you own: what they are worth now and how much you are up or down since you bought.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Money">
-        <img src="media/indices.gif" alt="Indexes" width="365" height="300" decoding="async">
+        <video class="clip" src="media/indices.mp4" data-gif="media/indices.gif" muted loop playsinline autoplay preload="auto" aria-label="Indexes" width="365" height="300"></video>
         <figcaption><b>Indexes</b><span>The S&amp;P 500, Nasdaq, Dow Jones and Tel Aviv 35, live.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Money">
-        <img src="media/markets.gif" alt="Market hours" width="365" height="300" decoding="async">
+        <video class="clip" src="media/markets.mp4" data-gif="media/markets.gif" muted loop playsinline autoplay preload="auto" aria-label="Market hours" width="365" height="300"></video>
         <figcaption><b>Market hours</b><span>When New York and Tel Aviv open and close, counting down, in your own time.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Money">
-        <img src="media/paper.gif" alt="Pretend portfolio" width="365" height="300" decoding="async">
+        <video class="clip" src="media/paper.mp4" data-gif="media/paper.gif" muted loop playsinline autoplay preload="auto" aria-label="Pretend portfolio" width="365" height="300"></video>
         <figcaption><b>Pretend portfolio</b><span>$10,000 of play money: buy and sell real stocks at real prices, with no real money.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Money">
-        <img src="media/guess.gif" alt="Higher or lower?" width="365" height="300" decoding="async">
+        <video class="clip" src="media/guess.mp4" data-gif="media/guess.gif" muted loop playsinline autoplay preload="auto" aria-label="Higher or lower?" width="365" height="300"></video>
         <figcaption><b>Higher or lower?</b><span>Will a stock be higher or lower tomorrow? Guess, and the card keeps score.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Money">
-        <img src="media/marketnews.gif" alt="Market news" width="365" height="300" decoding="async">
+        <video class="clip" src="media/marketnews.mp4" data-gif="media/marketnews.gif" muted loop playsinline autoplay preload="auto" aria-label="Market news" width="365" height="300"></video>
         <figcaption><b>Market news</b><span>A fresh headline about each of your stocks. Click one to read it.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Money">
-        <img src="media/crypto.gif" alt="Crypto" width="365" height="300" decoding="async">
+        <video class="clip" src="media/crypto.mp4" data-gif="media/crypto.gif" muted loop playsinline autoplay preload="auto" aria-label="Crypto" width="365" height="300"></video>
         <figcaption><b>Crypto</b><span>Bitcoin, Ethereum and Solana, live, with a line of the day.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Money">
-        <img src="media/rates.gif" alt="Dollar &amp; euro" width="365" height="300" decoding="async">
+        <video class="clip" src="media/rates.mp4" data-gif="media/rates.gif" muted loop playsinline autoplay preload="auto" aria-label="Dollar &amp; euro" width="365" height="300"></video>
         <figcaption><b>Dollar &amp; euro</b><span>The dollar and the euro in shekels, with a line of the week.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Money">
-        <img src="media/convert.gif" alt="Money converter" width="365" height="300" decoding="async">
+        <video class="clip" src="media/convert.mp4" data-gif="media/convert.gif" muted loop playsinline autoplay preload="auto" aria-label="Money converter" width="365" height="300"></video>
         <figcaption><b>Money converter</b><span>Dollars, shekels, euros, pounds, yen and coins, at the rate right now.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Your PC">
-        <img src="media/system.gif" alt="This PC" width="365" height="300" decoding="async">
+        <video class="clip" src="media/system.mp4" data-gif="media/system.gif" muted loop playsinline autoplay preload="auto" aria-label="This PC" width="365" height="300"></video>
         <figcaption><b>This PC</b><span>Processor, graphics, memory, network and how long the PC has been on, with a graph of the last minute. The pencil hides rows you don&#x27;t need.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Your PC">
-        <img src="media/drives.gif" alt="Drives" width="365" height="300" decoding="async">
+        <video class="clip" src="media/drives.mp4" data-gif="media/drives.gif" muted loop playsinline autoplay preload="auto" aria-label="Drives" width="365" height="300"></video>
         <figcaption><b>Drives</b><span>How much room is left on each drive.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Your PC">
-        <img src="media/batteries.gif" alt="Batteries" width="365" height="300" decoding="async">
+        <video class="clip" src="media/batteries.mp4" data-gif="media/batteries.gif" muted loop playsinline autoplay preload="auto" aria-label="Batteries" width="365" height="300"></video>
         <figcaption><b>Batteries</b><span>Bluetooth headphones, mouse and controllers that report a battery, and the laptop itself.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Your PC">
-        <img src="media/clipboard.gif" alt="Copied" width="365" height="300" decoding="async">
+        <video class="clip" src="media/clipboard.mp4" data-gif="media/clipboard.gif" muted loop playsinline autoplay preload="auto" aria-label="Copied" width="365" height="300"></video>
         <figcaption><b>Copied</b><span>The last few things you copied. Click one to copy it again. Kept in memory only.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Your PC">
-        <img src="media/clips.gif" alt="Clips" width="365" height="300" decoding="async">
+        <video class="clip" src="media/clips.mp4" data-gif="media/clips.gif" muted loop playsinline autoplay preload="auto" aria-label="Clips" width="365" height="300"></video>
         <figcaption><b>Clips</b><span>Your newest recording or screenshot, ready to open, with arrows to go back.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Your PC">
-        <img src="media/screentime.gif" alt="Screen time" width="365" height="300" decoding="async">
+        <video class="clip" src="media/screentime.mp4" data-gif="media/screentime.gif" muted loop playsinline autoplay preload="auto" aria-label="Screen time" width="365" height="300"></video>
         <figcaption><b>Screen time</b><span>How long you were at the PC today, the programs you used most, and the last seven days.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Your PC">
-        <img src="media/claude.gif" alt="Claude usage" width="365" height="300" decoding="async">
+        <video class="clip" src="media/claude.mp4" data-gif="media/claude.gif" muted loop playsinline autoplay preload="auto" aria-label="Claude usage" width="365" height="300"></video>
         <figcaption><b>Claude usage</b><span>How much of your Claude plan is used, and when each limit resets. Needs Claude Code on this PC.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Music and games">
-        <img src="media/music.gif" alt="Music" width="365" height="300" decoding="async">
+        <video class="clip" src="media/music.mp4" data-gif="media/music.gif" muted loop playsinline autoplay preload="auto" aria-label="Music" width="365" height="300"></video>
         <figcaption><b>Music</b><span>Whatever is playing in any app (Spotify, a browser, anything), with the cover, real buttons, and a bar you can drag. Shows the line being sung when the song has timed lyrics.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Music and games">
-        <img src="media/discord.gif" alt="Discord" width="365" height="300" decoding="async">
+        <video class="clip" src="media/discord.mp4" data-gif="media/discord.gif" muted loop playsinline autoplay preload="auto" aria-label="Discord" width="365" height="300"></video>
         <figcaption><b>Discord</b><span>Your Discord voice channel: who is in it, who is talking, Mute and Deafen, and new messages.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Music and games">
-        <img src="media/sound.gif" alt="Sound" width="365" height="300" decoding="async">
+        <video class="clip" src="media/sound.mp4" data-gif="media/sound.gif" muted loop playsinline autoplay preload="auto" aria-label="Sound" width="365" height="300"></video>
         <figcaption><b>Sound</b><span>Who is using the microphone (with Mute mic), the camera, Discord&#x27;s Mute and Deafen, and a volume slider for every app.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Music and games">
-        <img src="media/steam.gif" alt="Steam" width="365" height="300" decoding="async">
+        <video class="clip" src="media/steam.mp4" data-gif="media/steam.gif" muted loop playsinline autoplay preload="auto" aria-label="Steam" width="365" height="300"></video>
         <figcaption><b>Steam</b><span>What Steam is downloading and how far along, how many games are running, or the game you played last.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Music and games">
-        <img src="media/cs2inv.gif" alt="CS2 inventory" width="365" height="300" decoding="async">
+        <video class="clip" src="media/cs2inv.mp4" data-gif="media/cs2inv.gif" muted loop playsinline autoplay preload="auto" aria-label="CS2 inventory" width="365" height="300"></video>
         <figcaption><b>CS2 inventory</b><span>What your CS2 skins are worth, how it moved since yesterday, the days before, and your biggest movers.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Music and games">
-        <img src="media/networth.gif" alt="All my Steam" width="365" height="300" decoding="async">
+        <video class="clip" src="media/networth.mp4" data-gif="media/networth.gif" muted loop playsinline autoplay preload="auto" aria-label="All my Steam" width="365" height="300"></video>
         <figcaption><b>All my Steam</b><span>Your CS2 inventory and your Steam items together, in one number.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Music and games">
-        <img src="media/skinwatch.gif" alt="Skin watch list" width="365" height="300" decoding="async">
+        <video class="clip" src="media/skinwatch.mp4" data-gif="media/skinwatch.gif" muted loop playsinline autoplay preload="auto" aria-label="Skin watch list" width="365" height="300"></video>
         <figcaption><b>Skin watch list</b><span>Skins you want and the price you would pay. You get a note when one drops to your price.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Music and games">
-        <img src="media/cases.gif" alt="Is opening worth it?" width="365" height="300" decoding="async">
+        <video class="clip" src="media/cases.mp4" data-gif="media/cases.gif" muted loop playsinline autoplay preload="auto" aria-label="Is opening worth it?" width="365" height="300"></video>
         <figcaption><b>Is opening worth it?</b><span>Your CS2 cases: what opening one gives back on average, the chance to win, and the best drop.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Music and games">
-        <img src="media/steamitems.gif" alt="Steam items" width="365" height="300" decoding="async">
+        <video class="clip" src="media/steamitems.mp4" data-gif="media/steamitems.gif" muted loop playsinline autoplay preload="auto" aria-label="Steam items" width="365" height="300"></video>
         <figcaption><b>Steam items</b><span>What your Steam trading cards, backgrounds and emoticons are worth on the market.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Music and games">
-        <img src="media/news.gif" alt="Game updates" width="365" height="300" decoding="async">
+        <video class="clip" src="media/news.mp4" data-gif="media/news.gif" muted loop playsinline autoplay preload="auto" aria-label="Game updates" width="365" height="300"></video>
         <figcaption><b>Game updates</b><span>What changed in the latest patch of the games you play on Steam.</span></figcaption>
       </figure>
       <figure class="tile reveal" data-g="Music and games">
-        <img src="media/robrun.gif" alt="Last game" width="365" height="300" decoding="async">
+        <video class="clip" src="media/robrun.mp4" data-gif="media/robrun.gif" muted loop playsinline autoplay preload="auto" aria-label="Last game" width="365" height="300"></video>
         <figcaption><b>Last game</b><span>How your last game went, any game Pitzki summarises (CS2, Fortnite, Roblox...). ROB RUN shows live.</span></figcaption>
       </figure>
       </div>
@@ -515,7 +655,7 @@
         <p class="sub">Cards sit under every window, never show in the taskbar or Alt+Tab, line up with each other and the screen edge, and rest while a game covers them.</p>
       </div>
       <div class="two">
-        <figure class="reveal"><img src="media/join.gif" alt="Two cards joining into one"><figcaption><b>Join cards</b>Drop one card on another and they become one. Pull them apart again any time.</figcaption></figure>
+        <figure class="reveal"><video class="clip" src="media/join.mp4" data-gif="media/join.gif" muted loop playsinline autoplay preload="auto" aria-label="Two cards joining into one"></video><figcaption><b>Join cards</b>Drop one card on another and they become one. Pull them apart again any time.</figcaption></figure>
         <figure class="reveal"><img src="glass.png" alt="Cards with Liquid Glass"><figcaption><b>Liquid Glass</b>The wallpaper shows through, with a light on the edge. Three strengths, or off.</figcaption></figure>
       </div>
       <div class="grid">
@@ -542,6 +682,18 @@
 <tr><td>Any game</td><td>The Game profile turns on by itself, and Pitzki puts on a headset and cheers</td></tr></table>
     </section>
 
+    <!--kit-bento--><section id="why">
+      <div class="reveal" style="text-align:center"><p class="eyebrow">Why people keep it</p><h2>A desk that is alive, light, and only yours.</h2></div>
+      <div class="k-bento">
+        <div class="k-tile k-t1 reveal"><h3>Live, not pictures</h3><p>Numbers tick, music plays, tasks get done. Every card updates by itself.</p><div class="k-eq"><b style="height:30%;animation-duration:0.45s;animation-delay:-0.00s"></b><b style="height:99%;animation-duration:0.57s;animation-delay:-0.07s"></b><b style="height:48%;animation-duration:0.69s;animation-delay:-0.14s"></b><b style="height:95%;animation-duration:0.81s;animation-delay:-0.21s"></b><b style="height:65%;animation-duration:0.93s;animation-delay:-0.28s"></b><b style="height:86%;animation-duration:0.45s;animation-delay:-0.35s"></b><b style="height:79%;animation-duration:0.57s;animation-delay:-0.42s"></b><b style="height:73%;animation-duration:0.69s;animation-delay:-0.49s"></b><b style="height:90%;animation-duration:0.81s;animation-delay:-0.56s"></b><b style="height:58%;animation-duration:0.93s;animation-delay:-0.63s"></b><b style="height:97%;animation-duration:0.45s;animation-delay:-0.70s"></b><b style="height:40%;animation-duration:0.57s;animation-delay:-0.77s"></b><b style="height:100%;animation-duration:0.69s;animation-delay:-0.84s"></b><b style="height:38%;animation-duration:0.81s;animation-delay:-0.91s"></b><b style="height:98%;animation-duration:0.93s;animation-delay:-0.98s"></b><b style="height:55%;animation-duration:0.45s;animation-delay:-1.05s"></b><b style="height:92%;animation-duration:0.57s;animation-delay:-1.12s"></b><b style="height:71%;animation-duration:0.69s;animation-delay:-1.19s"></b><b style="height:81%;animation-duration:0.81s;animation-delay:-1.26s"></b><b style="height:84%;animation-duration:0.93s;animation-delay:-1.33s"></b><b style="height:67%;animation-duration:0.45s;animation-delay:-1.40s"></b><b style="height:94%;animation-duration:0.57s;animation-delay:-1.47s"></b></div></div>
+        <div class="k-tile k-t2 reveal"><div class="k-lock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="10" width="16" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></div><h3>Private by design</h3><p>No account. No ads. No tracking. Your stuff stays on your PC.</p></div>
+        <div class="k-tile k-t3 reveal"><h3>Snap and join</h3><p>Cards line up on their own, and two cards dropped together become one.</p></div>
+        <div class="k-tile k-t4 reveal"><h3>Light on your PC</h3><p>Anything you can't see stops animating.</p><div class="k-meter"><div><span>This app</span><i style="--w:24%"></i></div><div><span>A browser tab</span><i style="--w:100%;--c:#ffffff40"></i></div></div></div>
+        <div class="k-tile k-t5 reveal"><h3>Free. Really.</h3><p>Every feature, no catch.</p><div class="k-num">$0</div></div>
+        <div class="k-tile k-t6 k-sib reveal" style="--sib:#afa9ec"><div><h3>Also from Pitzki: Pitzki notch</h3><p>Want music, lyrics and timers at the top of your screen too? Meet the notch.</p></div><a class="k-go" href="https://yahavpenso.github.io/Piztki/">Meet Pitzki notch →</a></div>
+      </div>
+    </section>
+    <!--/kit-bento-->
     <section id="install">
       <div class="reveal">
         <p class="eyebrow">Install</p>
@@ -566,20 +718,56 @@
     <div class="big reveal">
       <svg class="mascot" viewBox="0 0 120 96" style="width:120px;height:96px"></svg>
       <h2 style="margin-top:10px">Ready when you are</h2>
-      <p style="margin-top:22px"><a class="button" href="https://github.com/yahavpenso/PitzkiWidgets/releases/latest">Download Pitzki Widgets</a></p>
-    </div>
+      <p style="margin-top:22px"><a class="button" href="https://github.com/yahavpenso/PitzkiWidgets/releases/latest"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v10m-4.5-4.5L10 13l4.5-4.5M4 17h12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Download Pitzki Widgets</a></p><!--kit-fam--><p class="k-family-link">Part of the Pitzki family · <a href="https://yahavpenso.github.io/">See both apps →</a></p><!--/kit-fam--></div>
   </div>
 
-  <footer>
-    <div class="wrap">Weather by Open-Meteo.com (CC BY 4.0) · Prices from Yahoo Finance, Skinport and the Steam market · Lyrics from LRCLIB · <a href="https://github.com/yahavpenso/PitzkiWidgets">Source on GitHub</a> · From the maker of <a href="https://github.com/yahavpenso/Piztki">Piztki</a></div>
-  </footer>
+  <!--brand-footer--><footer class="b-footer"><div class="b-in">
+  <div class="b-cols">
+    <div><div class="b-brand"><img src="icon.png" alt="">Pitzki Widgets</div><p class="b-blurb">Part of the Pitzki family: two little apps that make your Windows screen a little more alive. Free, private, and made with care.</p></div>
+    <div><h4>Pitzki family</h4><a href="https://yahavpenso.github.io/">Pitzki home</a><a href="https://yahavpenso.github.io/Piztki/">Pitzki notch</a><a href="https://yahavpenso.github.io/PitzkiWidgets/">Pitzki Widgets</a></div>
+    <div><h4>Download</h4><a href="https://github.com/yahavpenso/Piztki/releases">Pitzki notch</a><a href="https://github.com/yahavpenso/PitzkiWidgets/releases/latest">Pitzki Widgets</a><a href="https://yahavpenso.github.io/#which">Which one is for me?</a></div>
+    <div><h4>More</h4><a href="https://github.com/yahavpenso/PitzkiWidgets/wiki/Privacy">Privacy</a><a href="https://github.com/yahavpenso/PitzkiWidgets/wiki">Help pages</a><a href="https://github.com/yahavpenso">GitHub</a></div>
+  </div>
+  <p class="b-credits">Weather by Open-Meteo.com (CC BY 4.0) · Prices from Yahoo Finance, Skinport and the Steam market · Lyrics from LRCLIB</p>
+  <div class="b-bottom"><span>© 2026 Pitzki. Free for everyone.</span><span>Not affiliated with Microsoft or any game named here.</span></div>
+</div></footer><!--/brand-footer-->
 </main>
 
+<!--clips-js--><script>
+  window.Clips = (() => {
+    const io = new IntersectionObserver(es => es.forEach(e => {
+      const v = e.target;
+      if (e.isIntersecting) { const p = v.play(); if (p) p.catch(() => {}); } else v.pause();
+    }), { rootMargin: '120px' });
+    const fallback = v => {
+      if (v.dataset.fell) return; v.dataset.fell = 1;
+      const img = document.createElement('img');
+      img.src = v.dataset.gif; img.alt = v.getAttribute('aria-label') || ''; img.className = v.className;
+      for (const a of ['width', 'height', 'style']) if (v.hasAttribute(a)) img.setAttribute(a, v.getAttribute(a));
+      const done = () => img.closest('.waiting')?.classList.remove('waiting');
+      img.addEventListener('load', done, { once: true }); img.addEventListener('error', done, { once: true });
+      v.replaceWith(img);
+    };
+    const watch = v => { io.observe(v); v.addEventListener('error', () => fallback(v), { once: true }); v.querySelector('source')?.addEventListener('error', () => fallback(v), { once: true }); };
+    // a fresh clip, e.g. for a scene: plays from the start right away
+    const make = (base, label) => {
+      const v = document.createElement('video');
+      Object.assign(v, { muted: true, loop: true, playsInline: true, autoplay: true, preload: 'auto' });
+      v.setAttribute('muted', ''); v.setAttribute('playsinline', '');
+      v.dataset.gif = base + '.gif'; v.setAttribute('aria-label', label || '');
+      v.src = base + '.mp4';
+      v.addEventListener('error', () => fallback(v), { once: true });
+      return v;
+    };
+    document.querySelectorAll('video.clip').forEach(watch);
+    return { watch, make };
+  })();
+</script><!--/clips-js-->
 <script>
-  // The loading screen: waits for every clip on the page (they are real GIFs, a few MB in all), then lifts.
+  // The loading screen: waits for every clip on the page (they are smooth 60 fps clips), then lifts.
   (() => {
     const loader = document.getElementById('loader'), fill = document.getElementById('loader-fill'), count = document.getElementById('loader-count');
-    const imgs = [...document.images].filter(i => !i.closest(".loader") && i.loading !== "lazy");
+    const imgs = [...document.images, ...document.querySelectorAll('video.clip')].filter(i => !i.closest(".loader") && i.loading !== "lazy");
     let done = 0, closed = false;
     const close = () => { if (closed) return; closed = true; loader.classList.add('gone'); document.body.classList.remove('loading'); setTimeout(() => loader.remove(), 700); };
     const one = () => {
@@ -592,11 +780,12 @@
     imgs.forEach(i => {
       i.closest('.tile, .shot, .two figure')?.classList.add('waiting');
       const ok = () => { i.closest('.waiting')?.classList.remove('waiting'); one(); };
-      if (i.complete && i.naturalWidth) ok(); else { i.addEventListener('load', ok, { once: true }); i.addEventListener('error', one, { once: true }); }
+      if (i.tagName === 'VIDEO') { if (i.readyState >= 2) ok(); else { i.addEventListener('loadeddata', ok, { once: true }); i.addEventListener('error', ok, { once: true }); } }
+      else if (i.complete && i.naturalWidth) ok(); else { i.addEventListener('load', ok, { once: true }); i.addEventListener('error', one, { once: true }); }
     });
     if (!imgs.length) close();
     document.getElementById('loader-skip').addEventListener('click', close);
-    setTimeout(() => document.getElementById('loader-skip').classList.add('show'), 4000);
+    setTimeout(() => document.getElementById('loader-skip')?.classList.add('show'), 4000);
     setTimeout(close, 25000);    // a slow connection never keeps anyone out for long
   })();
 </script>
@@ -640,6 +829,44 @@
   }, { threshold: 0.05 });
   document.querySelectorAll('.reveal').forEach(el => seen.observe(el));
 </script>
-<script src="play.js"></script>
+<script src="play.js?v=7"></script>
+<!--brand-js--><button class="b-top" id="b-top" aria-label="Back to top">↑</button>
+<script>
+  (() => {
+    const nav = document.querySelector('nav'), bar = document.getElementById('b-progress'), top = document.getElementById('b-top');
+    const links = nav ? [...nav.querySelectorAll('a.link')].filter(a => a.getAttribute('href').startsWith('#')) : [];
+    const on = () => {
+      const y = scrollY, h = document.documentElement.scrollHeight - innerHeight;
+      if (nav) nav.classList.toggle('stuck', y > 40);
+      bar.style.transform = `scaleX(${h > 0 ? y / h : 0})`;
+      top.classList.toggle('show', y > 900);
+      let cur = null;
+      for (const a of links) { const s = document.querySelector(a.getAttribute('href')); if (s && s.getBoundingClientRect().top < 160) cur = a; }
+      links.forEach(a => a.classList.toggle('on', a === cur));
+    };
+    addEventListener('scroll', on, { passive: true }); on();
+    top.onclick = () => scrollTo({ top: 0, behavior: 'smooth' });
+  })();
+</script><!--/brand-js-->
+<!--kit-js--><script>
+  (() => {
+    const run = el => { const end = +el.dataset.kcount, t0 = performance.now();
+      const f = t => { const p = Math.min(1, (t - t0) / 1200); el.textContent = Math.round(end * (1 - Math.pow(1 - p, 3))); if (p < 1) requestAnimationFrame(f); }; requestAnimationFrame(f); };
+    const io = new IntersectionObserver(es => es.forEach(e => { if (!e.isIntersecting) return; e.target.classList.add('in'); e.target.querySelectorAll('[data-kcount]').forEach(run); io.unobserve(e.target); }), { threshold: .2 });
+    document.querySelectorAll('.k-stats, .k-tile').forEach(el => io.observe(el));
+  })();
+</script><!--/kit-js-->
+<!--local-links--><script>
+  // On this computer (or a phone on the same Wi-Fi) the sites run on local ports; send the family links there instead of the web.
+  if (/^(localhost|127\.0\.0\.1|192\.168\.|10\.|172\.(1[6-9]|2\d|3[01])\.)/.test(location.hostname)) {
+    const base = location.protocol + '//' + location.hostname + ':';
+    const map = [['https://yahavpenso.github.io/PitzkiWidgets/', base + '8766/'],
+                 ['https://yahavpenso.github.io/Piztki/', base + '8767/'],
+                 ['https://yahavpenso.github.io/', base + '8770/']];
+    document.querySelectorAll('a[href^="https://yahavpenso.github.io/"]').forEach(a => {
+      for (const [web, local] of map) if (a.href.startsWith(web)) { a.href = local + a.href.slice(web.length); break; }
+    });
+  }
+</script><!--/local-links-->
 </body>
 </html>

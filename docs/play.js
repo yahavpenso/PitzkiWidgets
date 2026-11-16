@@ -62,16 +62,26 @@
     say(text, main);
   }
 
+  // the app draws its icons with Windows' own icon font; use it too when this computer has it
+  (() => {
+    try {
+      const c = document.createElement('canvas').getContext('2d'), g = String.fromCharCode(0xE72E);
+      c.font = '20px monospace'; const plain = c.measureText(g).width;
+      c.font = '20px "Segoe Fluent Icons", "Segoe MDL2 Assets", monospace';
+      if (c.measureText(g).width !== plain) document.documentElement.classList.add('fluent');
+    } catch {}
+  })();
+
   // ----- the cards -----
   const KINDS = {
-    clock: { name: 'Clock', ico: '🕒', grp: 'Everyday', tip: "The time and today's date" },
-    pitzki: { name: 'Pitzki', ico: '☺', grp: 'Everyday', tip: 'He sits on the desktop and keeps you company' },
-    weather: { name: 'Weather', ico: '☀', grp: 'Everyday', tip: 'The weather, and Pitzki out in it' },
-    tasks: { name: 'Tasks', ico: '✓', grp: 'Everyday', tip: 'A short list you tick off' },
-    focus: { name: 'Focus rounds', ico: '◔', grp: 'Everyday', tip: '25 minutes of work, 5 of rest' },
-    stocks: { name: 'Stocks', ico: '📈', grp: 'Money', tip: 'Prices that move, with a line of the day' },
-    pc: { name: 'This PC', ico: '▣', grp: 'Your PC', tip: 'Processor, memory, network and a graph' },
-    music: { name: 'Music', ico: '♫', grp: 'Music and games', tip: "Whatever is playing, and Pitzki dances" },
+    clock: { name: 'Clock', ico: '<i class="fi-g">&#xE121;</i><i class="fi-s">🕒</i>', grp: 'Everyday', tip: "The time and today's date" },
+    pitzki: { name: 'Pitzki', ico: '<i class="fi-g">&#xE76E;</i><i class="fi-s">☺</i>', grp: 'Everyday', tip: 'He sits on the desktop and keeps you company' },
+    weather: { name: 'Weather', ico: '<i class="fi-g">&#xE706;</i><i class="fi-s">☀</i>', grp: 'Everyday', tip: 'The weather, and Pitzki out in it' },
+    tasks: { name: 'Tasks', ico: '<i class="fi-g">&#xE762;</i><i class="fi-s">✓</i>', grp: 'Everyday', tip: 'A short list you tick off' },
+    focus: { name: 'Focus rounds', ico: '<i class="fi-g">&#xE823;</i><i class="fi-s">◔</i>', grp: 'Everyday', tip: '25 minutes of work, 5 of rest' },
+    stocks: { name: 'Stocks', ico: '<i class="fi-g">&#xE9D2;</i><i class="fi-s">📈</i>', grp: 'Money', tip: 'Prices that move, with a line of the day' },
+    pc: { name: 'This PC', ico: '<i class="fi-g">&#xE7F4;</i><i class="fi-s">▣</i>', grp: 'Your PC', tip: 'Processor, memory, network and a graph' },
+    music: { name: 'Music', ico: '<i class="fi-g">&#xE8D6;</i><i class="fi-s">♫</i>', grp: 'Music and games', tip: "Whatever is playing, and Pitzki dances" },
   };
 
   const BUILD = {
@@ -100,7 +110,7 @@
         if (busy || !scenes.length || document.hidden || card.el.classList.contains('gone') || desk.classList.contains('playing')) return;
         busy = true;
         const s = scenes[Math.floor(Math.random() * scenes.length)];
-        const img = $(`<img src="scenes/${s.k}.gif" alt="${s.n}">`);
+        const img = window.Clips ? Clips.make(`scenes/${s.k}`, s.n) : $(`<img src="scenes/${s.k}.gif" alt="${s.n}">`);
         svg.style.visibility = 'hidden';
         stage.appendChild(img);
         roll(mood, s.n);
@@ -477,15 +487,15 @@
     const prof = { all: 'All cards', work: 'Work', game: 'Game' }[set.profile];
     const m = $(`<div class="menu tray">
       <div class="head">${mascot()}<div><b>Pitzki Widgets</b><span>Little cards on your desktop</span></div></div><hr>
-      <div class="row" data-a="picker"><span class="ico">⊞</span><span class="label">Widgets…</span></div><hr>
-      <div class="row" data-a="lockAll"><span class="ico">🔒</span><span class="label">Lock every card in place</span>${sw(set.lockAll)}</div>
-      <div class="row" data-a="lineUp"><span class="ico">☰</span><span class="label">Line cards up with each other</span>${sw(set.lineUp)}</div>
-      <div class="row" data-a="join"><span class="ico">⧉</span><span class="label">Join cards dropped together</span>${sw(set.join)}</div>
-      <div class="row" data-a="glass"><span class="ico">◈</span><span class="label">Liquid glass</span>${sw(set.glass)}</div><hr>
-      <div class="row" data-a="profile"><span class="ico">👤</span><span class="label">Profile</span><span class="pillsel">${prof} ›</span></div>
-      <div class="row" data-a="autoGame"><span class="ico">🎮</span><span class="label">Switch to Game while playing</span>${sw(set.autoGame)}</div><hr>
-      <div class="row" data-a="reset"><span class="ico">↺</span><span class="label">Put the cards back</span></div>
-      <div class="row quit" data-a="quit"><span class="ico">⏻</span><span class="label">Quit Pitzki Widgets</span></div></div>`);
+      <div class="row" data-a="picker"><span class="ico"><i class="fi-g">&#xE8A9;</i><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M12 4v16M4 12h16"/></svg></span><span class="label">Widgets…</span></div><hr>
+      <div class="row" data-a="lockAll"><span class="ico"><i class="fi-g">&#xE72E;</i><svg viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></span><span class="label">Lock every card in place</span>${sw(set.lockAll)}</div>
+      <div class="row" data-a="lineUp"><span class="ico"><i class="fi-g">&#xE8FD;</i><svg viewBox="0 0 24 24"><path d="M5 6h14M5 10h14M5 14h14M5 18h14"/></svg></span><span class="label">Line cards up with each other</span>${sw(set.lineUp)}</div>
+      <div class="row" data-a="join"><span class="ico"><i class="fi-g">&#xE71B;</i><svg viewBox="0 0 24 24"><rect x="4" y="4" width="10" height="10" rx="1.5"/><rect x="10" y="10" width="10" height="10" rx="1.5"/></svg></span><span class="label">Join cards dropped together</span>${sw(set.join)}</div>
+      <div class="row" data-a="glass"><span class="ico"><i class="fi-g">&#xE790;</i><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 15l7-7M8 11l3-3"/></svg></span><span class="label">Liquid glass</span>${sw(set.glass)}</div><hr>
+      <div class="row" data-a="profile"><span class="ico"><i class="fi-g">&#xE77B;</i><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/></svg></span><span class="label">Profile</span><span class="pillsel"><b>${prof}</b><i class="fi-g chev">&#xE76C;</i><i class="fi-s chev">›</i></span></div>
+      <div class="row" data-a="autoGame"><span class="ico"><i class="fi-g">&#xE7FC;</i><svg viewBox="0 0 24 24"><rect x="2.5" y="7" width="19" height="11" rx="5.5"/><path d="M7 10.5v4M5 12.5h4"/><circle cx="16" cy="11.5" r=".9" fill="currentColor"/><circle cx="17.8" cy="13.8" r=".9" fill="currentColor"/></svg></span><span class="label">Switch to Game while playing</span>${sw(set.autoGame)}</div><hr>
+      <div class="row" data-a="refresh"><span class="ico"><i class="fi-g">&#xE72C;</i><svg viewBox="0 0 24 24"><path d="M19 12a7 7 0 1 1-2.05-4.95"/><path d="M19 4.5V9h-4.5"/></svg></span><span class="label">Refresh</span></div>
+      <div class="row quit" data-a="quit"><span class="ico"><i class="fi-g">&#xE7E8;</i><svg viewBox="0 0 24 24"><path d="M12 3.5v8"/><path d="M6.6 6.8a8 8 0 1 0 10.8 0"/></svg></span><span class="label">Quit Pitzki Widgets</span></div></div>`);
     m.addEventListener('click', e => {
       const r = e.target.closest('.row'); if (!r) return;
       const a = r.dataset.a;
@@ -494,9 +504,10 @@
         if (a === 'glass' && set.glass) react('shiny ✨');
         return;
       }
-      if (a === 'profile') { set.profile = { all: 'work', work: 'game', game: 'all' }[set.profile]; save(); r.querySelector('.pillsel').textContent = { all: 'All cards', work: 'Work', game: 'Game' }[set.profile] + ' ›'; restyle(); return; }
+      if (a === 'profile') { set.profile = { all: 'work', work: 'game', game: 'all' }[set.profile]; save(); r.querySelector('.pillsel b').textContent = { all: 'All cards', work: 'Work', game: 'Game' }[set.profile]; restyle(); return; }
       closeMenus();
       if (a === 'picker') openPicker();
+      if (a === 'refresh') { persist(); location.hash = '#try'; location.reload(); }
       if (a === 'reset') { store.set('layout', null); store.set('tasks', null); location.hash = '#try'; location.reload(); }
       if (a === 'quit') quit();
     });
@@ -514,7 +525,7 @@
   // the "Widgets…" window: a switch for every card
   function openPicker() {
     desk.querySelector('.picker')?.remove();
-    const p = $(`<div class="picker"><header>${mascot()}<div><b>Widgets</b><span class="count"></span></div><button class="x">✕</button></header><div class="list"></div></div>`);
+    const p = $(`<div class="picker"><header>${mascot()}<div><b>Widgets</b><span class="count"></span></div><button class="x"><i class="fi-g">&#xE711;</i><i class="fi-s">✕</i></button></header><div class="list"></div></div>`);
     p.querySelector('.x').addEventListener('click', () => p.remove());
     p.addEventListener('pointerdown', e => e.stopPropagation());
     desk.appendChild(p);
@@ -564,7 +575,7 @@
 
   // ----- a pretend game, for the Game profile -----
   const gameBtn = desk.querySelector('.game-btn');
-  gameBtn.addEventListener('click', () => {
+  gameBtn?.addEventListener('click', () => {
     const on = !desk.classList.contains('playing');
     desk.classList.toggle('playing', on);
     gameBtn.classList.toggle('on', on);
@@ -608,12 +619,18 @@
   for (const s of window.SCENES || []) {
     const b = document.createElement('button');
     b.innerHTML = `<img src="scenes/${s.k}.png" alt="" loading="lazy">${s.n}${s.when ? `<small>${s.when}</small>` : ''}`;
+    // the little picture comes alive (60 fps) while the pointer is on it
+    b.addEventListener('pointerenter', e => {
+      if (e.pointerType !== 'mouse' || b.querySelector('video') || !window.Clips) return;
+      const v = Clips.make(`scenes/${s.k}`, s.n); v.className = 'tile-clip';
+      v.addEventListener('loadeddata', () => { if (b.matches(':hover')) v.classList.add('on'); else v.remove(); }, { once: true });
+      b.querySelector('img').after(v);
+    });
+    b.addEventListener('pointerleave', () => b.querySelector('video.tile-clip')?.remove());
     b.addEventListener('click', () => {
       grid.querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b));
-      view.querySelector('img')?.remove();
-      const img = document.createElement('img');
-      img.src = `scenes/${s.k}.gif?` + Date.now();     // from the start every time
-      img.alt = s.n;
+      view.querySelector('img, video')?.remove();
+      const img = Clips.make(`scenes/${s.k}`, s.n);     // a new clip starts from the beginning
       big.style.visibility = 'hidden';
       view.appendChild(img);
       name.textContent = s.n;
